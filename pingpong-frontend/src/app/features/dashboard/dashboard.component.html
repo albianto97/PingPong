@@ -1,32 +1,42 @@
-<h1 style="color:red">DASHBOARD CARICATA</h1>
-
 <div *ngIf="loading">Caricamento dati...</div>
 
-<div *ngIf="!loading && user">
+<div *ngIf="!loading && user" class="dashboard">
 
-  <section class="card highlight">
-    <h2>{{ user.username }}</h2>
-    <div class="stats">
+  <!-- HERO -->
+  <section class="hero">
+    <h2>Ciao {{ user.username }} 👋</h2>
+    <div class="hero-stats">
       <div>
         <span class="label">ELO</span>
         <span class="value">{{ user.eloRating }}</span>
       </div>
       <div *ngIf="rankingPosition !== null">
-        <span class="label">Posizione</span>
+        <span class="label">Classifica</span>
         <span class="value">#{{ rankingPosition }}</span>
       </div>
     </div>
   </section>
 
-  <section *ngIf="user.stats" class="card">
+  <!-- STATS -->
+  <section class="card">
     <h3>Statistiche</h3>
-    <div class="grid">
-      <div>Match: {{ user.stats.matchesPlayed }}</div>
-      <div>Vittorie: {{ user.stats.wins }}</div>
-      <div>Sconfitte: {{ user.stats.losses }}</div>
+    <div class="stats-grid">
+      <div>
+        <span class="num">{{ user.stats.matchesPlayed }}</span>
+        <span class="text">Match</span>
+      </div>
+      <div>
+        <span class="num">{{ user.stats.wins }}</span>
+        <span class="text">Vittorie</span>
+      </div>
+      <div>
+        <span class="num">{{ user.stats.losses }}</span>
+        <span class="text">Sconfitte</span>
+      </div>
     </div>
   </section>
 
+  <!-- LAST MATCHES -->
   <section class="card">
     <h3>Ultimi match</h3>
 
@@ -34,21 +44,23 @@
       Nessuna partita giocata
     </div>
 
-    <ul>
+    <ul class="matches">
       <li *ngFor="let match of lastMatches">
-        {{ match.players?.player1?.username }}
-        vs
-        {{ match.players?.player2?.username }}
-        —
-        <strong>
-          {{ match.winner === user._id ? 'Vittoria' : 'Sconfitta' }}
-        </strong>
+        <span>
+          {{ match.players?.player1?.username }}
+          vs
+          {{ match.players?.player2?.username }}
+        </span>
+
+        <span
+          class="badge"
+          [class.win]="match.winner === user._id"
+          [class.loss]="match.winner !== user._id"
+        >
+          {{ match.winner === user._id ? 'Vinto' : 'Perso' }}
+        </span>
       </li>
     </ul>
   </section>
 
-</div>
-
-<div *ngIf="!loading && !user">
-  Nessun dato utente disponibile.
 </div>

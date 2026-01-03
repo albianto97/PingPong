@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class MatchService {
@@ -14,6 +14,11 @@ export class MatchService {
     return this.http.get<any[]>(`${this.apiUrl}/last?limit=${limit}`);
   }
 
+  /** Storico completo */
+  getAllMatches() {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
   /** Inserimento match */
   createMatch(matchData: any) {
     return this.http.post<any>(this.apiUrl, matchData);
@@ -25,4 +30,11 @@ export class MatchService {
       `${this.apiUrl}/head-to-head/${userA}/${userB}`
     );
   }
+
+  getMatchesByUser(userId: string) {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/user/${userId}`
+    );
+  }
+
 }

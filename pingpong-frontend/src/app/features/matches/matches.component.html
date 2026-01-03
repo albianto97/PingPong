@@ -1,24 +1,49 @@
 <h2>Inserisci Match</h2>
 
 <section class="card">
+
+  <!-- Avversario -->
   <label>Avversario</label>
   <select [(ngModel)]="opponentId">
     <option value="">Seleziona</option>
-    <option *ngFor="let p of players" [value]="p._id">
+    <option *ngFor="let p of players" [value]="p.id">
       {{ p.username }}
     </option>
   </select>
 
-  <div class="scores">
-    <div>
-      <label>Tu</label>
-      <input type="number" [(ngModel)]="myPoints" />
-    </div>
+  <!-- Numero set -->
+  <h4>Numero di set</h4>
+  <label>
+    <input type="radio" [(ngModel)]="setsToWin" [value]="1" (change)="updateSets()">
+    1 set
+  </label>
 
-    <div>
-      <label>Avversario</label>
-      <input type="number" [(ngModel)]="opponentPoints" />
-    </div>
+  <label>
+    <input type="radio" [(ngModel)]="setsToWin" [value]="3" (change)="updateSets()">
+    3 set
+  </label>
+
+  <!-- Punteggio -->
+  <h4>Punteggio set</h4>
+  <label>
+    <input type="radio" [(ngModel)]="maxPoints" [value]="11" (change)="updateSets()">
+    A 11
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="maxPoints" [value]="21" (change)="updateSets()">
+    A 21
+  </label>
+
+  <!-- SET DINAMICI -->
+  <div *ngFor="let set of sets; let i = index" class="scores">
+    <h4>Set {{ i + 1 }}</h4>
+
+    <label>Tu</label>
+    <input type="number" [(ngModel)]="set.player1Points">
+
+    <label>Avversario</label>
+    <input type="number" [(ngModel)]="set.player2Points">
   </div>
 
   <button (click)="submitMatch()">Salva match</button>

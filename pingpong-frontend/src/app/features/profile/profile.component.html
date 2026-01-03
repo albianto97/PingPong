@@ -18,6 +18,20 @@
     </div>
   </section>
 
+  <h3>Storico match</h3>
+
+  <ul>
+    <li *ngFor="let match of matches">
+      {{ match.players.player1.username }}
+      vs
+      {{ match.players.player2.username }}
+      —
+      <strong>
+        {{ match.winner.username }}
+      </strong>
+    </li>
+  </ul>
+
   <app-head-to-head [opponentId]="user._id"></app-head-to-head>
 
 </div>

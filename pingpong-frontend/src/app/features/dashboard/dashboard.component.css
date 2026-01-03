@@ -1,22 +1,28 @@
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.highlight {
+/* HERO */
+.hero {
   background: linear-gradient(135deg, #2563eb, #1e40af);
   color: white;
+  padding: 20px;
+  border-radius: 18px;
 }
 
-.stats {
+.hero h2 {
+  margin: 0 0 12px 0;
+}
+
+.hero-stats {
   display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+  gap: 24px;
 }
 
 .label {
+  display: block;
   font-size: 12px;
   opacity: 0.8;
 }
@@ -26,8 +32,56 @@
   font-weight: bold;
 }
 
-.grid {
+/* CARD */
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 14px;
+}
+
+/* STATS GRID */
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+}
+
+.num {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.text {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* MATCHES */
+.matches {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.matches li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badge.win {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.loss {
+  background: #fee2e2;
+  color: #991b1b;
 }

@@ -8,6 +8,8 @@ router.post('/', authGuard, matchController.createMatch);
 router.get('/me', authGuard, matchController.getMyMatches);
 router.get('/last', authGuard, matchController.getLastMatches);
 router.get('/head-to-head/:playerA/:playerB', authGuard, matchController.getHeadToHead);
+router.get('/', authGuard, matchController.getAllMatches);
+
 
 
 

@@ -1,0 +1,160 @@
+Storico match con punteggi per set
+
+Grafico andamento ELO
+
+Tornei (round robin / bracket) - ranking torneo - eliminazione diretta
+
+admin
+
+coppie - statistiche separate - storico doppio
+
+
+🧠 ORA IL RECAP TOTALE DEL PROGETTO (ROADMAP)
+
+Questa è la checklist reale per arrivare a un’app completa stile “ATP/WTA ping pong”.
+
+✅ FATTO FINORA (OTTIMO LAVORO)
+Backend
+
+✔ Auth JWT (login / register)
+
+✔ User model con stats persistenti
+
+✔ Match model
+
+✔ ELO funzionante
+
+✔ Inserimento match singolo
+
+✔ Validazione punteggi corretta (11 / 21, scarto 2)
+
+✔ Head-to-head (fixato)
+
+✔ Storico match per utente
+
+Frontend
+
+✔ Angular classico (NgModule)
+
+✔ AuthService + interceptor
+
+✔ Guard
+
+✔ Login / Register UI
+
+✔ Dashboard base
+
+✔ Ranking
+
+✔ Profilo utente
+
+✔ Inserimento match dinamico (1 o 3 set)
+
+👉 Sei oltre il 60% del progetto.
+
+🔜 COSA MANCA ANCORA (ROADMAP COMPLETA)
+🟢 F9 — STORICO MATCH AVANZATO
+
+Lista match con:
+
+data
+
+avversario
+
+punteggio set per set
+
+vittoria / sconfitta
+
+filtro:
+
+solo vittorie
+
+solo sconfitte
+
+ultimo mese
+
+🟢 F10 — DASHBOARD “SPORTIVA”
+
+card stile app ufficiali:
+
+ELO attuale
+
+variazione ultimo match (+12 / -8)
+
+win streak / losing streak
+
+ultimi 5 match cliccabili
+
+🟢 F11 — HEAD TO HEAD COMPLETO
+
+statistiche:
+
+vittorie A / B
+
+set vinti / persi
+
+ultimi risultati
+
+pulsante “Rivincita” (precompila match)
+
+🟢 F12 — TORNEI (CORE FEATURE)
+Backend
+
+Tournament model
+
+tipi:
+
+round robin
+
+eliminazione diretta
+
+regole torneo (11/21 – 1/3 set)
+
+classifica torneo separata
+
+Frontend
+
+creazione torneo (admin)
+
+tabellone / calendario
+
+avanzamento torneo
+
+applicazione ELO ponderata
+
+🟢 F13 — DOPPIO
+
+match di doppio
+
+coppie casuali o manuali
+
+stats doppio separate
+
+NO impatto ranking singolo
+
+🟢 F14 — UX & PWA
+
+grafico ELO nel tempo
+
+badge (100 match, 10 win streak, ecc.)
+
+PWA offline
+
+notifiche push (opzionale)
+
+🟢 F15 — REFACTOR & HARDENING
+
+DTO backend
+
+validazioni centralizzate
+
+test base
+
+cleanup UI
+
+🎯 CONSIGLIO ORA
+
+Non correre.
+Il prossimo step giusto è:
+
+👉 F9 – Storico match avanzato con punteggi per set

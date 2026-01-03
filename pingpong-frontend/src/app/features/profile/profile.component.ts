@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../core/services/user.service';
 import {HeadToHeadComponent} from './head-to-head.component';
+import {MatchService} from '../../core/services/match.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,11 +16,16 @@ export class ProfileComponent implements OnInit {
 
   user: any;
   loading = true;
+  matches: any[] = [];
+
+
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private matchService: MatchService
   ) {}
+
 
   ngOnInit() {
     const userId = this.route.snapshot.paramMap.get('id')!;
@@ -27,5 +33,8 @@ export class ProfileComponent implements OnInit {
       this.user = user;
       this.loading = false;
     });
+    this.matchService.getMatchesByUser(userId)
+      .subscribe(m => this.matches = m);
   }
+
 }

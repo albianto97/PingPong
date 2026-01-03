@@ -39,3 +39,19 @@ button {
 .message {
   margin-top: 10px;
 }
+.message {
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+.message:empty {
+  display: none;
+}
+
+.message {
+  color: #dc2626;
+}
+
+.message:contains("salvato") {
+  color: #16a34a;
+}

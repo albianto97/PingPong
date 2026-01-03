@@ -1,9 +1,9 @@
 <ul class="ranking-list">
   <li
     *ngFor="let player of ranking; let i = index"
-    [routerLink]="['/profile', player._id]"
+    [routerLink]="['/profile', player.id]"
     class="ranking-item"
-    [class.me]="player._id === currentUserId"
+    [class.me]="player.id === currentUserId"
   >
     <span class="pos">#{{ i + 1 }}</span>
 
