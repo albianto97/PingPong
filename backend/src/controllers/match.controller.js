@@ -80,3 +80,102 @@ exports.createMatch = async (req, res) => {
         res.status(500).json({ message: 'Match creation failed', error });
     }
 };
+// STORICO MATCH UTENTE
+exports.getMyMatches = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const matches = await Match.find({
+            $or: [
+                { 'players.player1': userId },
+                { 'players.player2': userId },
+                { 'players.partner1': userId },
+                { 'players.partner2': userId }
+            ]
+        })
+            .populate('players.player1', 'username')
+            .populate('players.player2', 'username')
+            .sort({ playedAt: -1 });
+
+        res.json(matches);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch match history', error });
+    }
+};
+// ULTIMI MATCH (dashboard)
+exports.getLastMatches = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const limit = parseInt(req.query.limit) || 5;
+
+        const matches = await Match.find({
+            $or: [
+                { 'players.player1': userId },
+                { 'players.player2': userId }
+            ]
+        })
+            .populate('players.player1', 'username')
+            .populate('players.player2', 'username')
+            .sort({ playedAt: -1 })
+            .limit(limit);
+
+        res.json(matches);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch last matches', error });
+    }
+};
+// HEAD TO HEAD
+exports.getHeadToHead = async (req, res) => {
+    try {
+        const { playerA, playerB } = req.params;
+
+        const matches = await Match.find({
+            type: 'SINGLE',
+            $or: [
+                {
+                    'players.player1': playerA,
+                    'players.player2': playerB
+                },
+                {
+                    'players.player1': playerB,
+                    'players.player2': playerA
+                }
+            ]
+        }).sort({ playedAt: -1 });
+
+        let stats = {
+            totalMatches: matches.length,
+            playerAWins: 0,
+            playerBWins: 0,
+            setsA: 0,
+            setsB: 0,
+            lastMatches: []
+        };
+
+        matches.forEach((match) => {
+            const winner = match.winner.toString();
+
+            if (winner === playerA) stats.playerAWins++;
+            if (winner === playerB) stats.playerBWins++;
+
+            match.sets.forEach((set) => {
+                if (set.player1Points > set.player2Points) {
+                    match.players.player1.toString() === playerA
+                        ? stats.setsA++
+                        : stats.setsB++;
+                } else {
+                    match.players.player2.toString() === playerA
+                        ? stats.setsA++
+                        : stats.setsB++;
+                }
+            });
+        });
+
+        stats.lastMatches = matches.slice(0, 5);
+
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch head-to-head', error });
+    }
+};
+
