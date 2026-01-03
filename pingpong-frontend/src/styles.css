@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+}

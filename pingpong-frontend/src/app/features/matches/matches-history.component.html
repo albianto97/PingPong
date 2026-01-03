@@ -1,0 +1,21 @@
+<h2>Storico Match</h2>
+
+<div *ngIf="loading">Caricamento...</div>
+
+<ul class="matches" *ngIf="!loading">
+  <li *ngFor="let m of matches">
+    <span>
+      {{ m.players.player1.username }}
+      vs
+      {{ m.players.player2.username }}
+    </span>
+
+    <strong>
+      {{ m.winner.username }}
+    </strong>
+
+    <small>
+      {{ m.createdAt | date:'short' }}
+    </small>
+  </li>
+</ul>
