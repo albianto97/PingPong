@@ -1,0 +1,17 @@
+<ul class="ranking-list">
+  <li
+    *ngFor="let player of ranking; let i = index"
+    [routerLink]="['/profile', player._id]"
+    class="ranking-item"
+    [class.me]="player._id === currentUserId"
+  >
+    <span class="pos">#{{ i + 1 }}</span>
+
+    <span class="name">
+      {{ player.username }}
+      <span *ngIf="player._id === currentUserId">👋</span>
+    </span>
+
+    <span class="elo">{{ player.eloRating }}</span>
+  </li>
+</ul>

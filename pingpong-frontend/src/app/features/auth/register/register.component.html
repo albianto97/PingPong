@@ -1,0 +1,14 @@
+<h2>Crea account</h2>
+<p class="subtitle">Registrati per iniziare</p>
+
+<form (ngSubmit)="register()">
+  <input [(ngModel)]="username" name="username" placeholder="Username" required />
+  <input [(ngModel)]="email" name="email" placeholder="Email" required />
+  <input [(ngModel)]="password" name="password" type="password" placeholder="Password" required />
+
+  <button type="submit">Registrati</button>
+</form>
+
+<p class="error" *ngIf="error">{{ error }}</p>
+
+<a routerLink="/auth/login">Hai già un account? Login</a>

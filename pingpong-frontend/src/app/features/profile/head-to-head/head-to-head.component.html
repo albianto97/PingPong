@@ -1,0 +1,16 @@
+<section class="card">
+  <h3>Head to Head</h3>
+
+  <div *ngIf="loading">Caricamento...</div>
+
+  <div *ngIf="!loading && stats" class="grid">
+    <div>Match: {{ stats.total }}</div>
+    <div>Vittorie tue: {{ stats.winsMe }}</div>
+    <div>Vittorie avversario: {{ stats.winsOpponent }}</div>
+    <div>Ultimo match: {{ stats.lastResult }}</div>
+  </div>
+
+  <div *ngIf="!loading && !stats">
+    Nessun match giocato
+  </div>
+</section>

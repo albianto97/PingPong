@@ -1,0 +1,18 @@
+<header class="top-bar">
+  <span class="logo">🏓 PingPong</span>
+
+  <div class="user-area" *ngIf="user">
+    <span class="user">Ciao {{ user.username }} 👋</span>
+    <button class="logout" (click)="logout()">Logout</button>
+  </div>
+</header>
+
+<main class="content">
+  <router-outlet></router-outlet>
+</main>
+
+<nav class="bottom-nav">
+  <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+  <a routerLink="/ranking" routerLinkActive="active">Ranking</a>
+  <a routerLink="/matches" routerLinkActive="active">Match</a>
+</nav>

@@ -1,0 +1,29 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <p class="subtitle">Accedi al tuo account</p>
+
+    <form (ngSubmit)="login()">
+      <input
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <a routerLink="/auth/register">Non hai un account? Registrati</a>
+  </div>
+</div>

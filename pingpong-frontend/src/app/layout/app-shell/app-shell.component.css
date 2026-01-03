@@ -1,0 +1,61 @@
+/* TOP BAR */
+.top-bar {
+  height: 56px;
+  background: #111827;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.logo {
+  font-weight: bold;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logout {
+  background: transparent;
+  border: 1px solid #374151;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* CONTENT */
+.content {
+  padding: 16px;
+  padding-bottom: 72px; /* spazio per bottom nav */
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: white;
+  display: flex;
+  border-top: 1px solid #e5e7eb;
+}
+
+.bottom-nav a {
+  flex: 1;
+  text-align: center;
+  line-height: 56px;
+  text-decoration: none;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.bottom-nav a.active {
+  color: #2563eb;
+  font-weight: bold;
+}

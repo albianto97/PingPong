@@ -1,0 +1,23 @@
+<div *ngIf="loading">Caricamento profilo...</div>
+
+<div *ngIf="!loading && user" class="profile">
+
+  <section class="card highlight">
+    <h2>{{ user.username }}</h2>
+    <p>ELO: {{ user.eloRating }}</p>
+  </section>
+
+  <section class="card">
+    <h3>Statistiche</h3>
+    <div class="grid">
+      <div>Match: {{ user.stats.matchesPlayed }}</div>
+      <div>Vittorie: {{ user.stats.wins }}</div>
+      <div>Sconfitte: {{ user.stats.losses }}</div>
+      <div>Set vinti: {{ user.stats.setsWon }}</div>
+      <div>Set persi: {{ user.stats.setsLost }}</div>
+    </div>
+  </section>
+
+  <app-head-to-head [opponentId]="user._id"></app-head-to-head>
+
+</div>
