@@ -1,1 +1,27 @@
-<p>matches works!</p>
+<h2>Inserisci Match</h2>
+
+<section class="card">
+  <label>Avversario</label>
+  <select [(ngModel)]="opponentId">
+    <option value="">Seleziona</option>
+    <option *ngFor="let p of players" [value]="p._id">
+      {{ p.username }}
+    </option>
+  </select>
+
+  <div class="scores">
+    <div>
+      <label>Tu</label>
+      <input type="number" [(ngModel)]="myPoints" />
+    </div>
+
+    <div>
+      <label>Avversario</label>
+      <input type="number" [(ngModel)]="opponentPoints" />
+    </div>
+  </div>
+
+  <button (click)="submitMatch()">Salva match</button>
+
+  <p class="message">{{ message }}</p>
+</section>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MatchService} from '../../../core/services/match.service';
-import {AuthService} from '../../../core/services/auth.service';
+import {MatchService} from '../../core/services/match.service';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-head-to-head',

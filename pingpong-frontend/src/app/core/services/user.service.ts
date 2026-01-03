@@ -4,15 +4,23 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+
   private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {}
 
+  /** Utente loggato */
   getMe() {
     return this.http.get<any>(`${this.apiUrl}/me`);
   }
 
+  /** Classifica */
   getRanking() {
     return this.http.get<any[]>(`${this.apiUrl}/ranking`);
+  }
+
+  /** Profilo pubblico */
+  getUserById(userId: string) {
+    return this.http.get<any>(`${this.apiUrl}/${userId}`);
   }
 }

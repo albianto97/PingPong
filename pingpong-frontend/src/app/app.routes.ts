@@ -12,7 +12,8 @@ import { RegisterComponent } from './features/auth/register/register.component';
 // app features
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { RankingComponent } from './features/ranking/ranking.component';
-import { ProfileComponent } from './features/profile/profile/profile.component';
+import { ProfileComponent } from './features/profile/profile.component';
+import {MatchesComponent} from './features/matches/matches.component';
 
 export const routes: Routes = [
 
@@ -36,6 +37,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'ranking', component: RankingComponent },
       { path: 'profile/:id', component: ProfileComponent },
+      { path: 'matches', component: MatchesComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

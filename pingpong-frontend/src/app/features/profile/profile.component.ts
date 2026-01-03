@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../../core/services/user.service';
-import {HeadToHeadComponent} from '../head-to-head/head-to-head.component';
+import { UserService } from '../../core/services/user.service';
+import {HeadToHeadComponent} from './head-to-head.component';
 
 @Component({
   selector: 'app-profile',
