@@ -3,50 +3,65 @@
 <section class="card">
 
   <!-- Avversario -->
-  <label>Avversario</label>
-  <select [(ngModel)]="opponentId">
-    <option value="">Seleziona</option>
-    <option *ngFor="let p of players" [value]="p.id">
-      {{ p.username }}
-    </option>
-  </select>
-
-  <!-- Numero set -->
-  <h4>Numero di set</h4>
-  <label>
-    <input type="radio" [(ngModel)]="setsToWin" [value]="1" (change)="updateSets()">
-    1 set
-  </label>
-
-  <label>
-    <input type="radio" [(ngModel)]="setsToWin" [value]="3" (change)="updateSets()">
-    3 set
-  </label>
-
-  <!-- Punteggio -->
-  <h4>Punteggio set</h4>
-  <label>
-    <input type="radio" [(ngModel)]="maxPoints" [value]="11" (change)="updateSets()">
-    A 11
-  </label>
-
-  <label>
-    <input type="radio" [(ngModel)]="maxPoints" [value]="21" (change)="updateSets()">
-    A 21
-  </label>
-
-  <!-- SET DINAMICI -->
-  <div *ngFor="let set of sets; let i = index" class="scores">
-    <h4>Set {{ i + 1 }}</h4>
-
-    <label>Tu</label>
-    <input type="number" [(ngModel)]="set.player1Points">
-
+  <div class="form-group">
     <label>Avversario</label>
-    <input type="number" [(ngModel)]="set.player2Points">
+    <select [(ngModel)]="opponentId">
+      <option value="">Seleziona</option>
+      <option *ngFor="let p of players" [value]="p.id">
+        {{ p.username }}
+      </option>
+    </select>
   </div>
 
-  <button (click)="submitMatch()">Salva match</button>
+  <!-- CONFIG MATCH -->
+  <div class="config-row">
+
+    <!-- Numero set -->
+    <div class="form-group">
+      <label>Numero set</label>
+      <select [(ngModel)]="maxSets" (change)="updateSets()">
+        <option [value]="1">1 set</option>
+        <option [value]="3">Best of 3</option>
+      </select>
+    </div>
+
+    <!-- Punteggio set -->
+    <div class="form-group">
+      <label>Punteggio set</label>
+      <select [(ngModel)]="maxPoints">
+        <option [value]="11">A 11</option>
+        <option [value]="21">A 21</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- SET DINAMICI -->
+  <div class="sets-container">
+    <div *ngFor="let set of sets; let i = index" class="set-card">
+      <h4>Set {{ i + 1 }}</h4>
+
+      <div class="scores">
+        <div>
+          <label>Tu</label>
+          <input type="number" [(ngModel)]="set.player1Points">
+        </div>
+
+        <div>
+          <label>Avversario</label>
+          <input type="number" [(ngModel)]="set.player2Points">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button *ngIf="canAddSet()" (click)="addSet()">
+    + Aggiungi set
+  </button>
+
+  <button class="primary" (click)="submitMatch()">
+    Salva match
+  </button>
 
   <p class="message">{{ message }}</p>
 </section>

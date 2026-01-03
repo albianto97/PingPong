@@ -1,34 +1,8 @@
 const Match = require('../models/match.model');
 const User = require('../models/user.model');
 const { calculateElo } = require('../services/elo.service');
+const validateSet = require('../utils/validateSet');
 
-exports = function validateSet(set, rules) {
-    const { player1Points, player2Points } = set;
-    const { maxPoints } = rules;
-
-    // numeri validi
-    if (
-        typeof player1Points !== 'number' ||
-        typeof player2Points !== 'number'
-    ) return false;
-
-    // no pareggi
-    if (player1Points === player2Points) return false;
-
-    const max = Math.max(player1Points, player2Points);
-    const min = Math.min(player1Points, player2Points);
-
-    // non può vincere senza arrivare al punteggio minimo
-    if (max < maxPoints) return false;
-
-    // scarto minimo 2
-    if (max - min < 2) return false;
-
-    // NON può chiudere prima del massimo
-    if (max === maxPoints && min > maxPoints - 2) return false;
-
-    return true;
-};
 
 
 exports.createMatch = async (req, res) => {
@@ -40,14 +14,17 @@ exports.createMatch = async (req, res) => {
 
         for (const set of sets) {
             if (!validateSet(set, rules)) {
-                return res.status(400).json({
-                    message: 'Punteggio set non valido'
-                });
+                return res.status(400).json({ message: 'Punteggio set non valido' });
             }
 
             if (set.player1Points > set.player2Points) p1Sets++;
             else p2Sets++;
+
+            if (p1Sets === rules.setsToWin || p2Sets === rules.setsToWin) {
+                break;
+            }
         }
+
 
         const winner =
             p1Sets > p2Sets ? players.player1 : players.player2;
@@ -60,6 +37,7 @@ exports.createMatch = async (req, res) => {
             winner
         });
 
+        // ELO & stats (singolo)
         // ELO & stats (singolo)
         if (type === 'SINGLE') {
             const user1 = await User.findById(players.player1);
@@ -88,9 +66,27 @@ exports.createMatch = async (req, res) => {
                 user1.stats.losses++;
             }
 
+            // 🔴 QUESTO BLOCCO QUI (CORRETTO)
+            for (const set of sets) {
+                user1.stats.pointsFor += set.player1Points;
+                user1.stats.pointsAgainst += set.player2Points;
+
+                user2.stats.pointsFor += set.player2Points;
+                user2.stats.pointsAgainst += set.player1Points;
+
+                if (set.player1Points > set.player2Points) {
+                    user1.stats.setsWon++;
+                    user2.stats.setsLost++;
+                } else {
+                    user2.stats.setsWon++;
+                    user1.stats.setsLost++;
+                }
+            }
+
             await user1.save();
             await user2.save();
         }
+
 
         res.status(201).json(match);
     } catch (err) {

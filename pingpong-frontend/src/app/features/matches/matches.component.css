@@ -1,57 +1,77 @@
 .card {
-  background: white;
-  padding: 16px;
-  border-radius: 14px;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  max-width: 420px;
+  margin: auto;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
 }
 
 label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
   display: block;
-  margin-bottom: 4px;
-  font-weight: 500;
 }
 
-select,
-input {
+select, input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  padding: 0.6rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.config-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.config-row .form-group {
+  flex: 1;
+}
+
+.set-card {
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.8rem;
 }
 
 .scores {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  display: flex;
+  gap: 1rem;
 }
 
-button {
+.scores > div {
+  flex: 1;
+}
+
+button.primary {
   width: 100%;
-  padding: 12px;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border-radius: 12px;
   background: #2563eb;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.primary:hover {
+  background: #1e40af;
 }
 
 .message {
-  margin-top: 10px;
-}
-.message {
-  margin-top: 12px;
-  font-weight: 500;
-}
-
-.message:empty {
-  display: none;
-}
-
-.message {
-  color: #dc2626;
-}
-
-.message:contains("salvato") {
-  color: #16a34a;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: 600;
 }

@@ -14,6 +14,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { RankingComponent } from './features/ranking/ranking.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import {MatchesComponent} from './features/matches/matches.component';
+import {MatchesHistoryComponent} from './features/matches/matches-history.component';
 
 export const routes: Routes = [
 
@@ -38,6 +39,7 @@ export const routes: Routes = [
       { path: 'ranking', component: RankingComponent },
       { path: 'profile/:id', component: ProfileComponent },
       { path: 'matches', component: MatchesComponent },
+      { path: 'matches/history', component: MatchesHistoryComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
