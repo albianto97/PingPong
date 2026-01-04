@@ -75,3 +75,16 @@ button.primary:hover {
   margin-top: 0.5rem;
   font-weight: 600;
 }
+.set-card h4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.set-card button.remove {
+  background: transparent;
+  border: none;
+  color: #f87171;
+  font-size: 1.1rem;
+  cursor: pointer;
+}

@@ -1,0 +1,78 @@
+.page-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.history-container {
+  max-width: 800px;
+  margin: auto;
+  background: #0f172a;
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.history-toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.history-toolbar button {
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  background: #1e293b;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.history-toolbar button.active {
+  background: #2563eb;
+}
+
+.history-header,
+.history-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: center;
+  padding: 0.6rem;
+}
+
+.history-header {
+  font-weight: bold;
+  border-bottom: 1px solid #334155;
+}
+
+.history-row {
+  cursor: pointer;
+  border-bottom: 1px solid #334155;
+}
+
+.history-row:hover {
+  background: #1e293b;
+}
+
+.player {
+  text-align: center;
+}
+
+.result {
+  text-align: center;
+  font-weight: bold;
+}
+
+.set-detail {
+  grid-column: 1 / -1;
+  padding-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+}
+
+.history-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}

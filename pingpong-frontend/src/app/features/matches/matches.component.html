@@ -45,6 +45,18 @@
     <div *ngFor="let set of sets; let i = index" class="set-card">
       <h4>Set {{ i + 1 }}</h4>
 
+      <div class="set-card">
+        <h4>
+          Set {{ i + 1 }}
+          <button
+            *ngIf="sets.length > 1"
+            class="remove"
+            (click)="removeSet(i)">
+            ✕
+          </button>
+        </h4>
+      </div>
+
       <div class="scores">
         <div>
           <label>Tu</label>

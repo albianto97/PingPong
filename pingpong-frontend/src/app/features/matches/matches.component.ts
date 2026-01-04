@@ -74,7 +74,20 @@ export class MatchesComponent implements OnInit {
       this.message = 'Dati mancanti';
       return;
     }
-    const setsToWin = this.maxSets === 3 ? 2 : 1;
+
+    const completedSets = this.sets.filter(
+      s =>
+        typeof s.player1Points === 'number' &&
+        typeof s.player2Points === 'number'
+    );
+
+    const requiredSets = this.maxSets === 3 ? 2 : 1;
+
+    if (completedSets.length < requiredSets) {
+      this.message = `Devi completare almeno ${requiredSets} set`;
+      return;
+    }
+
     this.matchService.createMatch({
       type: 'SINGLE',
       players: {
@@ -83,9 +96,9 @@ export class MatchesComponent implements OnInit {
       },
       rules: {
         maxPoints: this.maxPoints,
-        setsToWin
+        setsToWin: requiredSets
       },
-      sets: this.sets
+      sets: completedSets
     }).subscribe({
       next: () => this.message = 'Match salvato!',
       error: () => this.message = 'Errore nel salvataggio'
