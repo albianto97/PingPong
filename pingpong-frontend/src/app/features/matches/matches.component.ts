@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { MatchService } from '../../core/services/match.service';
 import {AuthService} from '../../core/services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-matches',
@@ -17,17 +18,21 @@ export class MatchesComponent implements OnInit {
   players: any[] = [];
   opponentId = '';
   message = '';
-  maxSets = 3;
+
   maxPoints = 11;
+  isBestOf3 = false;
+
+  sets: { player1Points: number | null; player2Points: number | null }[] = [];
 
   constructor(
     private userService: UserService,
     private matchService: MatchService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private router: Router
+
+) {}
 
   ngOnInit() {
-
     this.authService.user$.subscribe(me => {
       if (!me) return;
 
@@ -36,25 +41,24 @@ export class MatchesComponent implements OnInit {
       });
     });
 
+    this.updateMatchFormat();
   }
 
-  sets = [
-    { player1Points: null, player2Points: null }
-  ];
-
-  canAddSet() {
-    return this.sets.length < this.maxSets;
-  }
-
-  addSet() {
-    if (this.canAddSet()) {
-      this.sets.push({ player1Points: null, player2Points: null });
+  /** Inizializza i set in base al formato */
+  updateMatchFormat() {
+    if (this.isBestOf3) {
+      this.sets = [
+        { player1Points: null, player2Points: null },
+        { player1Points: null, player2Points: null }
+      ];
+    } else {
+      this.sets = [
+        { player1Points: null, player2Points: null }
+      ];
     }
   }
-  removeSet(i: number) {
-    this.sets.splice(i, 1);
-  }
 
+  /** Calcola set vinti */
   getSetWins() {
     let p1 = 0;
     let p2 = 0;
@@ -68,6 +72,17 @@ export class MatchesComponent implements OnInit {
     return { p1, p2 };
   }
 
+  /** Aggiunge il 3° set SOLO se serve */
+  checkThirdSet() {
+    if (!this.isBestOf3) return;
+
+    const { p1, p2 } = this.getSetWins();
+
+    if (p1 === 1 && p2 === 1 && this.sets.length === 2) {
+      this.sets.push({ player1Points: null, player2Points: null });
+    }
+  }
+
   submitMatch() {
     const me = this.authService.getCurrentUser();
     if (!me || !this.opponentId) {
@@ -75,17 +90,18 @@ export class MatchesComponent implements OnInit {
       return;
     }
 
-    const completedSets = this.sets.filter(
-      s =>
-        typeof s.player1Points === 'number' &&
-        typeof s.player2Points === 'number'
-    );
+    const { p1, p2 } = this.getSetWins();
 
-    const requiredSets = this.maxSets === 3 ? 2 : 1;
+    if (this.isBestOf3) {
+      if (p1 === 1 && p2 === 1) {
+        this.message = 'Serve il terzo set per decidere il match';
+        return;
+      }
 
-    if (completedSets.length < requiredSets) {
-      this.message = `Devi completare almeno ${requiredSets} set`;
-      return;
+      if (p1 < 2 && p2 < 2) {
+        this.message = 'Match incompleto';
+        return;
+      }
     }
 
     this.matchService.createMatch({
@@ -96,24 +112,15 @@ export class MatchesComponent implements OnInit {
       },
       rules: {
         maxPoints: this.maxPoints,
-        setsToWin: requiredSets
+        setsToWin: this.isBestOf3 ? 2 : 1
       },
-      sets: completedSets
+      sets: this.sets
     }).subscribe({
-      next: () => this.message = 'Match salvato!',
+      next: () => {
+        this.message = 'Match salvato!';
+        this.router.navigate(['/dashboard']);
+      },
       error: () => this.message = 'Errore nel salvataggio'
     });
-  }
-
-  updateSets() {
-    // riduce i set se cambi formato
-    if (this.sets.length > this.maxSets) {
-      this.sets = this.sets.slice(0, this.maxSets);
-    }
-
-    // se non c'è nessun set, ne aggiunge uno
-    if (this.sets.length === 0) {
-      this.sets.push({ player1Points: null, player2Points: null });
-    }
   }
 }

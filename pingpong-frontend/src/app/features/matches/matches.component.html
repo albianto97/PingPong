@@ -1,6 +1,6 @@
 <h2>Inserisci Match</h2>
 
-<section class="card">
+<section class="card wide">
 
   <!-- Avversario -->
   <div class="form-group">
@@ -16,16 +16,16 @@
   <!-- CONFIG MATCH -->
   <div class="config-row">
 
-    <!-- Numero set -->
+    <!-- Formato -->
     <div class="form-group">
-      <label>Numero set</label>
-      <select [(ngModel)]="maxSets" (change)="updateSets()">
-        <option [value]="1">1 set</option>
-        <option [value]="3">Best of 3</option>
+      <label>Formato</label>
+      <select [(ngModel)]="isBestOf3" (change)="updateMatchFormat()">
+        <option [ngValue]="false">1 set</option>
+        <option [ngValue]="true">Best of 3</option>
       </select>
     </div>
 
-    <!-- Punteggio set -->
+    <!-- Punteggio -->
     <div class="form-group">
       <label>Punteggio set</label>
       <select [(ngModel)]="maxPoints">
@@ -36,45 +36,39 @@
 
   </div>
 
+  <!-- SCORE LIVE -->
   <p class="live-score">
     Set vinti: {{ getSetWins().p1 }} - {{ getSetWins().p2 }}
   </p>
 
-  <!-- SET DINAMICI -->
+  <!-- SET -->
   <div class="sets-container">
     <div *ngFor="let set of sets; let i = index" class="set-card">
-      <h4>Set {{ i + 1 }}</h4>
 
-      <div class="set-card">
-        <h4>
-          Set {{ i + 1 }}
-          <button
-            *ngIf="sets.length > 1"
-            class="remove"
-            (click)="removeSet(i)">
-            ✕
-          </button>
-        </h4>
-      </div>
+      <h4>Set {{ i + 1 }}</h4>
 
       <div class="scores">
         <div>
           <label>Tu</label>
-          <input type="number" [(ngModel)]="set.player1Points">
+          <input
+            type="number"
+            [(ngModel)]="set.player1Points"
+            (change)="checkThirdSet()"
+          />
         </div>
 
         <div>
           <label>Avversario</label>
-          <input type="number" [(ngModel)]="set.player2Points">
+          <input
+            type="number"
+            [(ngModel)]="set.player2Points"
+            (change)="checkThirdSet()"
+          />
         </div>
       </div>
+
     </div>
   </div>
-
-  <button *ngIf="canAddSet()" (click)="addSet()">
-    + Aggiungi set
-  </button>
-
 
   <button class="primary" (click)="submitMatch()">
     Salva match
