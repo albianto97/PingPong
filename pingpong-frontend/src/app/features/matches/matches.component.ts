@@ -17,19 +17,8 @@ export class MatchesComponent implements OnInit {
   players: any[] = [];
   opponentId = '';
   message = '';
-
-
-  sets = [
-    { player1Points: null, player2Points: null }
-  ];
-
   maxSets = 3;
   maxPoints = 11;
-  matchFormat: 'SINGLE_SET' | 'BEST_OF_3' = 'SINGLE_SET';
-
-  get setsToWin() {
-    return this.matchFormat === 'BEST_OF_3' ? 2 : 1;
-  }
 
   constructor(
     private userService: UserService,
@@ -38,31 +27,33 @@ export class MatchesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const me = this.authService.getCurrentUser();
-    this.userService.getRanking().subscribe(players => {
-      this.players = players.filter(p => p.id !== me?._id);
+
+    this.authService.user$.subscribe(me => {
+      if (!me) return;
+
+      this.userService.getRanking().subscribe(players => {
+        this.players = players.filter(p => p.id !== me._id);
+      });
     });
 
   }
 
+  sets = [
+    { player1Points: null, player2Points: null }
+  ];
+
+  canAddSet() {
+    return this.sets.length < this.maxSets;
+  }
+
   addSet() {
-    if (this.sets.length < this.maxSets) {
+    if (this.canAddSet()) {
       this.sets.push({ player1Points: null, player2Points: null });
     }
   }
-
-  canAddSet() {
-    const { p1, p2 } = this.getSetWins();
-
-    const setsToWin = this.maxSets === 3 ? 2 : 1;
-
-    return (
-      p1 < setsToWin &&
-      p2 < setsToWin &&
-      this.sets.length < this.maxSets
-    );
+  removeSet(i: number) {
+    this.sets.splice(i, 1);
   }
-
 
   getSetWins() {
     let p1 = 0;
@@ -83,9 +74,7 @@ export class MatchesComponent implements OnInit {
       this.message = 'Dati mancanti';
       return;
     }
-
     const setsToWin = this.maxSets === 3 ? 2 : 1;
-
     this.matchService.createMatch({
       type: 'SINGLE',
       players: {

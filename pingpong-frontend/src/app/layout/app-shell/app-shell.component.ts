@@ -26,7 +26,6 @@ export class AppShellComponent implements OnInit {
 
   ngOnInit() {
     this.authService.loadUserFromApi(); // 👈 FIX REFRESH
-
     this.authService.user$.subscribe(user => {
       this.user = user;
     });

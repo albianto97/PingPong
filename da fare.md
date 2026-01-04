@@ -310,10 +310,6 @@ Non è solo un CRUD di match, ma una **vera esperienza sportiva digitale**:
 
 ---
 
-Se vuoi, nel prossimo messaggio posso:
+1 -- Storico match per singolo giocatore (profile/:id)
 
-* trasformare questo README in **versione Markdown pronta**
-* oppure partire subito con **F9 – Storico match avanzato**
-* oppure **refactor backend pulito**
-
-Dimmi tu 👉 **prossimo step** 🏓🔥
+2 -- Head-to-head funzionante davvero

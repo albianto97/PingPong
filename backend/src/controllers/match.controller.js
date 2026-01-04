@@ -170,19 +170,34 @@ exports.getHeadToHead = async (req, res) => {
     }
 };
 
+// GET /matches?page=1&limit=10
 exports.getAllMatches = async (req, res) => {
     try {
-        const matches = await Match.find()
-            .sort({ createdAt: -1 })
-            .populate('players.player1', 'username')
-            .populate('players.player2', 'username')
-            .populate('winner', 'username');
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
 
-        res.json(matches);
+        const [matches, total] = await Promise.all([
+            Match.find()
+                .populate('players.player1', 'username')
+                .populate('players.player2', 'username')
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit),
+            Match.countDocuments()
+        ]);
+
+        res.json({
+            matches,
+            total,
+            page,
+            pages: Math.ceil(total / limit)
+        });
     } catch (err) {
-        res.status(500).json({ message: 'Cannot load matches' });
+        res.status(500).json({ message: 'Failed to fetch matches', err });
     }
 };
+
 
 exports.getMatchesByUser = async (req, res) => {
     try {

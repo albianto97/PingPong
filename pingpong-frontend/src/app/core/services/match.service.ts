@@ -15,9 +15,12 @@ export class MatchService {
   }
 
   /** Storico completo */
-  getAllMatches() {
-    return this.http.get<any[]>(this.apiUrl);
+  getAllMatches(page = 1, limit = 10) {
+    return this.http.get<any>(
+      `${this.apiUrl}?page=${page}&limit=${limit}`
+    );
   }
+
 
   /** Inserimento match */
   createMatch(matchData: any) {

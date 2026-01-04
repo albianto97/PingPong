@@ -1,21 +1,33 @@
 <h2>Storico Match</h2>
 
-<div *ngIf="loading">Caricamento...</div>
+<div class="toolbar">
+  <label>Mostra:</label>
+  <button *ngFor="let l of [5,10,20,50]" (click)="changeLimit(l)">
+    {{ l }}
+  </button>
+</div>
 
-<ul class="matches" *ngIf="!loading">
-  <li *ngFor="let m of matches">
-    <span>
-      {{ m.players.player1.username }}
-      vs
-      {{ m.players.player2.username }}
-    </span>
+<div *ngFor="let m of matches" class="match-row" (click)="toggle(m._id)">
+  <strong>{{ m.players.player1.username }}</strong>
+  vs
+  <strong>{{ m.players.player2.username }}</strong>
 
-    <strong>
-      {{ m.winner.username }}
-    </strong>
+  <span class="result">
+    {{ getResult(m) }}
+  </span>
 
-    <small>
-      {{ m.createdAt | date:'short' }}
-    </small>
-  </li>
-</ul>
+  <small>{{ m.createdAt | date:'short' }}</small>
+
+  <div *ngIf="expandedMatchId === m._id" class="sets">
+    <div *ngFor="let s of m.sets; let i = index">
+      Set {{ i + 1 }}: {{ s.player1Points }} - {{ s.player2Points }}
+    </div>
+  </div>
+</div>
+
+<div class="pagination">
+  <button (click)="prevPage()" [disabled]="page === 1">◀</button>
+  Pagina {{ page }} / {{ pages }}
+  <button (click)="nextPage()" [disabled]="page === pages">▶</button>
+</div>
+
