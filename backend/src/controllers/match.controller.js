@@ -198,6 +198,29 @@ exports.getAllMatches = async (req, res) => {
     }
 };
 
+exports.getMatchesByPlayer = async (req, res) => {
+    try {
+        const { playerId } = req.params;
+
+        const matches = await Match.find({
+            $or: [
+                { 'players.player1': playerId },
+                { 'players.player2': playerId }
+            ]
+        })
+            .populate('players.player1', 'username')
+            .populate('players.player2', 'username')
+            .sort({ createdAt: -1 });
+
+        res.json(matches);
+    } catch (error) {
+        res.status(500).json({
+            message: 'Failed to fetch player matches',
+            error
+        });
+    }
+};
+
 
 exports.getMatchesByUser = async (req, res) => {
     try {

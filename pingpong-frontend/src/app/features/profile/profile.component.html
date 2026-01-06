@@ -2,36 +2,63 @@
 
 <div *ngIf="!loading && user" class="profile">
 
-  <section class="card highlight">
+  <!-- HEADER PROFILO -->
+  <section class="card highlight profile-header">
     <h2>{{ user.username }}</h2>
     <p>ELO: {{ user.eloRating }}</p>
   </section>
 
+  <!-- STATISTICHE -->
   <section class="card">
     <h3>Statistiche</h3>
     <div class="grid">
-      <div>Match: {{ user.stats.matchesPlayed }}</div>
-      <div>Vittorie: {{ user.stats.wins }}</div>
-      <div>Sconfitte: {{ user.stats.losses }}</div>
-      <div>Set vinti: {{ user.stats.setsWon }}</div>
-      <div>Set persi: {{ user.stats.setsLost }}</div>
+      <div><strong>Match:</strong> {{ user.stats.matchesPlayed }}</div>
+      <div><strong>Vittorie:</strong> {{ user.stats.wins }}</div>
+      <div><strong>Sconfitte:</strong> {{ user.stats.losses }}</div>
+      <div><strong>Set vinti:</strong> {{ user.stats.setsWon }}</div>
+      <div><strong>Set persi:</strong> {{ user.stats.setsLost }}</div>
     </div>
   </section>
 
-  <h3>Storico match</h3>
-
-  <ul>
-    <li *ngFor="let match of matches">
-      {{ match.players.player1.username }}
-      vs
-      {{ match.players.player2.username }}
-      —
-      <strong>
-        {{ match.winner.username }}
-      </strong>
-    </li>
-  </ul>
-
+  <!-- HEAD TO HEAD -->
   <app-head-to-head [opponentId]="user._id"></app-head-to-head>
+
+  <!-- STORICO MATCH -->
+  <section class="card">
+    <h3>Storico Match</h3>
+
+    <div *ngIf="matches.length === 0">
+      Nessun match disputato
+    </div>
+
+    <div
+      *ngFor="let m of matches"
+      class="match-row"
+      [class.win]="isWin(m)"
+      [class.loss]="!isWin(m)"
+    >
+      <div class="row">
+        <span class="players">
+          {{ m.players.player1.username }}
+          <strong>vs</strong>
+          {{ m.players.player2.username }}
+        </span>
+
+        <span class="result">
+          {{ getResult(m) }}
+        </span>
+      </div>
+
+      <div class="sets">
+        <span *ngFor="let s of m.sets; let i = index">
+          Set {{ i + 1 }}: {{ s.player1Points }} - {{ s.player2Points }}
+        </span>
+      </div>
+
+      <small class="date">
+        {{ m.createdAt | date:'short' }}
+      </small>
+    </div>
+  </section>
 
 </div>

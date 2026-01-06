@@ -40,4 +40,9 @@ export class MatchService {
     );
   }
 
+  getMatchesByPlayer(playerId: string) {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/player/${playerId}`
+    );
+  }
 }

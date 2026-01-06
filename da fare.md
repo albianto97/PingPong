@@ -313,3 +313,4 @@ Non è solo un CRUD di match, ma una **vera esperienza sportiva digitale**:
 1 -- Storico match per singolo giocatore (profile/:id)
 
 2 -- Head-to-head funzionante davvero
+3 -- tornei

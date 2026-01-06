@@ -72,6 +72,8 @@ export class MatchesComponent implements OnInit {
     return { p1, p2 };
   }
 
+
+
   /** Aggiunge il 3° set SOLO se serve */
   checkThirdSet() {
     if (!this.isBestOf3) return;

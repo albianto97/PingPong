@@ -1,21 +1,22 @@
-.profile {
-  padding-bottom: 16px;
+.profile-header {
+  text-align: center;
 }
 
-.card {
-  background: white;
-  padding: 16px;
-  border-radius: 14px;
-  margin-bottom: 16px;
+.players {
+  font-size: 15px;
 }
 
-.highlight {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: white;
+.date {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #666;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+.match-row {
+  transition: background 0.2s ease;
+}
+
+.match-row:hover {
+  background: #f9fafb;
 }
