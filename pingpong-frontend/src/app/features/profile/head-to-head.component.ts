@@ -24,11 +24,12 @@ export class HeadToHeadComponent implements OnInit {
 
   ngOnInit() {
     const me = this.authService.getCurrentUser();
-    if (!me) return;
+    if (!me || !this.opponentId) return;
 
-    this.matchService.getHeadToHead(me._id, this.opponentId)
-      .subscribe(data => {
-        this.stats = data;
+    this.matchService
+      .getHeadToHead(me._id, this.opponentId)
+      .subscribe(res => {
+        this.stats = res;
         this.loading = false;
       });
   }

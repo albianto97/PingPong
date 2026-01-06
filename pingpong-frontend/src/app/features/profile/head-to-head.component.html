@@ -3,14 +3,18 @@
 
   <div *ngIf="loading">Caricamento...</div>
 
-  <div *ngIf="!loading && stats" class="grid">
-    <div>Match: {{ stats.total }}</div>
-    <div>Vittorie tue: {{ stats.winsMe }}</div>
-    <div>Vittorie avversario: {{ stats.winsOpponent }}</div>
-    <div>Ultimo match: {{ stats.lastResult }}</div>
-  </div>
+  <div *ngIf="!loading && stats">
+    <p><strong>Match:</strong> {{ stats.total }}</p>
 
-  <div *ngIf="!loading && !stats">
-    Nessun match giocato
+    <div class="grid">
+      <div>Vittorie: {{ stats.winsA }}</div>
+      <div>Sconfitte: {{ stats.winsB }}</div>
+      <div>Set: {{ stats.setsA }} - {{ stats.setsB }}</div>
+      <div>Punti: {{ stats.pointsA }} - {{ stats.pointsB }}</div>
+    </div>
+
+    <p *ngIf="stats.lastMatch">
+      Ultimo match: {{ stats.lastMatch.createdAt | date:'short' }}
+    </p>
   </div>
 </section>

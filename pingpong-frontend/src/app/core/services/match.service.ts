@@ -28,11 +28,12 @@ export class MatchService {
   }
 
   /** Head to Head */
-  getHeadToHead(userA: string, userB: string) {
+  getHeadToHead(playerA: string, playerB: string) {
     return this.http.get<any>(
-      `${this.apiUrl}/head-to-head/${userA}/${userB}`
+      `${this.apiUrl}/head-to-head/${playerA}/${playerB}`
     );
   }
+
 
   getMatchesByUser(userId: string) {
     return this.http.get<any[]>(

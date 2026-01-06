@@ -141,35 +141,6 @@ exports.getLastMatches = async (req, res) => {
     }
 };
 
-// HEAD TO HEAD
-exports.getHeadToHead = async (req, res) => {
-    try {
-        const { userA, userB } = req.params;
-
-        const matches = await Match.find({
-            type: 'SINGLE',
-            $or: [
-                {
-                    'players.player1': userA,
-                    'players.player2': userB
-                },
-                {
-                    'players.player1': userB,
-                    'players.player2': userA
-                }
-            ]
-        })
-            .sort({ createdAt: -1 })
-            .populate('players.player1', 'username')
-            .populate('players.player2', 'username')
-            .populate('winner', 'username');
-
-        res.json(matches);
-    } catch (err) {
-        res.status(500).json({ message: 'Head to head error' });
-    }
-};
-
 // GET /matches?page=1&limit=10
 exports.getAllMatches = async (req, res) => {
     try {
@@ -218,6 +189,62 @@ exports.getMatchesByPlayer = async (req, res) => {
             message: 'Failed to fetch player matches',
             error
         });
+    }
+};
+
+exports.getHeadToHead = async (req, res) => {
+    try {
+        const { playerA, playerB } = req.params;
+
+        const matches = await Match.find({
+            $or: [
+                { 'players.player1': playerA, 'players.player2': playerB },
+                { 'players.player1': playerB, 'players.player2': playerA }
+            ]
+        });
+
+        const stats = {
+            total: matches.length,
+            winsA: 0,
+            winsB: 0,
+            setsA: 0,
+            setsB: 0,
+            pointsA: 0,
+            pointsB: 0,
+            lastMatch: null
+        };
+
+        for (const m of matches) {
+            let setsA = 0;
+            let setsB = 0;
+
+            const aIsP1 = m.players.player1.toString() === playerA;
+
+            for (const s of m.sets) {
+                const aPoints = aIsP1 ? s.player1Points : s.player2Points;
+                const bPoints = aIsP1 ? s.player2Points : s.player1Points;
+
+                stats.pointsA += aPoints;
+                stats.pointsB += bPoints;
+
+                if (aPoints > bPoints) setsA++;
+                else setsB++;
+            }
+
+            stats.setsA += setsA;
+            stats.setsB += setsB;
+
+            if (setsA > setsB) stats.winsA++;
+            else stats.winsB++;
+
+            if (!stats.lastMatch || m.createdAt > stats.lastMatch.createdAt) {
+                stats.lastMatch = m;
+            }
+        }
+
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Head to head failed', err });
     }
 };
 
