@@ -45,8 +45,12 @@
         </span>
 
         <span class="result">
-          {{ getResult(m) }}
-        </span>
+        {{ getResult(m) }}
+          <small>
+        ({{ isWin(m) ? 'Vittoria' : 'Sconfitta' }})
+  </small>
+</span>
+
       </div>
 
       <div class="sets">

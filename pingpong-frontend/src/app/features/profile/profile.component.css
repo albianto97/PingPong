@@ -1,22 +1,125 @@
+/* GENERALE */
+.profile {
+  max-width: 900px;
+  margin: auto;
+  padding: 12px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* HEADER PROFILO */
 .profile-header {
   text-align: center;
+  background: linear-gradient(135deg, #f8fafc, #eef2f7);
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.profile-header p {
+  margin-top: 6px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* STATISTICHE */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  font-size: 14px;
+}
+
+/* MATCH */
+.match-row {
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.match-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* VITTORIA / SCONFITTA */
+.match-row.win {
+  background: #ecfdf5;
+  border-left: 6px solid #16a34a;
+}
+
+.match-row.loss {
+  background: #fef2f2;
+  border-left: 6px solid #dc2626;
+}
+
+/* RIGA PRINCIPALE */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .players {
   font-size: 15px;
+  font-weight: 600;
 }
 
+.result {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.win .result {
+  color: #16a34a;
+}
+
+.loss .result {
+  color: #dc2626;
+}
+
+/* SET */
+.sets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.sets span {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* DATA */
 .date {
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 12px;
-  color: #666;
+  color: #6b7280;
 }
 
-.match-row {
-  transition: background 0.2s ease;
-}
+/* MOBILE */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 
-.match-row:hover {
-  background: #f9fafb;
+  .result {
+    font-size: 15px;
+  }
 }
