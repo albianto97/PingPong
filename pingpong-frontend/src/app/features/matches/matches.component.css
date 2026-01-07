@@ -113,3 +113,62 @@ button.primary:hover {
   font-size: 1.1rem;
   cursor: pointer;
 }
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 640px) {
+
+  .card.wide {
+    padding: 1.2rem;
+    margin: 1rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  /* Config match: colonne → righe */
+  .config-row {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  /* Set: una colonna */
+  .sets-container {
+    grid-template-columns: 1fr;
+  }
+
+  .set-card {
+    padding: 1rem;
+  }
+
+  .set-card h4 {
+    font-size: 1rem;
+  }
+
+  /* Input più grandi (touch friendly) */
+  input,
+  select {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .scores {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  /* Bottone principale */
+  button.primary {
+    padding: 0.9rem;
+    font-size: 1rem;
+  }
+
+  /* Score live più leggibile */
+  .live-score {
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .message {
+    font-size: 0.95rem;
+  }
+}
