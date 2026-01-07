@@ -14,7 +14,7 @@
 <nav class="bottom-nav">
   <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
   <a routerLink="/ranking" routerLinkActive="active">Ranking</a>
-  <a routerLink="/matches" routerLinkActive="active">Match</a>
-  <a routerLink="/matches/history">Storico Match</a>
+  <a routerLink="/matches" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Match</a>
+  <a routerLink="/matches/history" routerLinkActive="active">Storico Match</a>
 
 </nav>
