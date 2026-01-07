@@ -1,78 +1,108 @@
-.page-title {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
 .history-container {
-  max-width: 800px;
-  margin: auto;
-  background: #0f172a;
-  color: #e5e7eb;
-  border-radius: 12px;
-  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
 }
 
-.history-toolbar {
+/* ===== Toolbar ===== */
+.toolbar {
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.history-toolbar button {
-  padding: 0.4rem 0.7rem;
-  border-radius: 6px;
-  background: #1e293b;
-  color: white;
-  border: none;
-  cursor: pointer;
+.toolbar input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
-.history-toolbar button.active {
-  background: #2563eb;
-}
-
-.history-header,
-.history-row {
-  display: grid;
-  grid-template-columns: 1fr 120px 1fr;
+.limits {
+  display: flex;
   align-items: center;
-  padding: 0.6rem;
+  gap: 6px;
 }
 
-.history-header {
-  font-weight: bold;
-  border-bottom: 1px solid #334155;
-}
-
-.history-row {
+.limits button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
   cursor: pointer;
-  border-bottom: 1px solid #334155;
 }
 
-.history-row:hover {
-  background: #1e293b;
+.limits button.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }
 
-.player {
-  text-align: center;
+/* ===== Match card ===== */
+.match-card {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  cursor: pointer;
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.players {
+  font-size: 16px;
 }
 
 .result {
-  text-align: center;
   font-weight: bold;
+  font-size: 18px;
 }
 
-.set-detail {
-  grid-column: 1 / -1;
-  padding-top: 0.5rem;
-  font-size: 0.85rem;
-  color: #cbd5f5;
+.meta {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
 }
 
-.history-pagination {
+/* ===== Sets ===== */
+.sets {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* ===== Stato ===== */
+.loading,
+.empty {
+  text-align: center;
+  padding: 20px;
+  color: #64748b;
+}
+
+/* ===== Pagination ===== */
+.pagination {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
