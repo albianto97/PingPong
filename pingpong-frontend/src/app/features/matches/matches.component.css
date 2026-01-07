@@ -10,6 +10,21 @@
   gap: 1rem;
 }
 
+/* 🔴 Set non valido */
+.set-card.invalid {
+  border: 2px solid #dc2626;
+  background: #fef2f2;
+}
+
+/* Messaggio errore set */
+.set-error {
+  margin-top: 0.4rem;
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+
 .set-card {
   background: #1e293b;
   padding: 1rem;
