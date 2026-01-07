@@ -1,22 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatchService } from '../../core/services/match.service';
 
 @Component({
   selector: 'app-matches-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './matches-history.component.html',
   styleUrls: ['./matches-history.component.css']
 })
-
-
 export class MatchesHistoryComponent implements OnInit {
 
   matches: any[] = [];
+  filteredMatches: any[] = [];
+
+  loading = true;
+
+  // ricerca
+  search = '';
+
+  // paginazione
   page = 1;
   limit = 10;
   pages = 1;
+
   expandedMatchId: string | null = null;
 
   constructor(private matchService: MatchService) {}
@@ -26,36 +34,47 @@ export class MatchesHistoryComponent implements OnInit {
   }
 
   load() {
+    this.loading = true;
+
     this.matchService.getAllMatches(this.page, this.limit)
       .subscribe(res => {
         this.matches = res.matches;
         this.pages = res.pages;
+        this.applyFilter();
+        this.loading = false;
       });
   }
 
-  changeLimit(l: number) {
-    this.limit = l;
-    this.page = 1;
-    this.load();
+  /* =========================
+     FILTRO RICERCA
+     ========================= */
+  applyFilter() {
+    const term = this.search.toLowerCase().trim();
+
+    this.filteredMatches = this.matches.filter(m =>
+      m.players.player1.username.toLowerCase().includes(term) ||
+      m.players.player2.username.toLowerCase().includes(term)
+    );
   }
 
-  toggle(matchId: string) {
-    this.expandedMatchId =
-      this.expandedMatchId === matchId ? null : matchId;
-  }
-
+  /* =========================
+     RISULTATO MATCH
+     ========================= */
   getResult(match: any): string {
-    const p1 = match.sets.filter(
-      (s: any) => s.player1Points > s.player2Points
-    ).length;
+    let a = 0;
+    let b = 0;
 
-    const p2 = match.sets.filter(
-      (s: any) => s.player2Points > s.player1Points
-    ).length;
+    for (const s of match.sets) {
+      if (s.player1Points > s.player2Points) a++;
+      else b++;
+    }
 
-    return `${p1} - ${p2}`;
+    return `${a} - ${b}`;
   }
 
+  /* =========================
+     PAGINAZIONE
+     ========================= */
   prevPage() {
     if (this.page > 1) {
       this.page--;
@@ -70,5 +89,17 @@ export class MatchesHistoryComponent implements OnInit {
     }
   }
 
-}
+  changeLimit(l: number) {
+    this.limit = l;
+    this.page = 1;
+    this.load();
+  }
 
+  /* =========================
+     ESPANSIONE SET
+     ========================= */
+  toggle(matchId: string) {
+    this.expandedMatchId =
+      this.expandedMatchId === matchId ? null : matchId;
+  }
+}
