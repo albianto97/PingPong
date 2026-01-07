@@ -82,10 +82,20 @@ export class MatchesComponent implements OnInit {
 
     const { p1, p2 } = this.getSetWins();
 
-    if (p1 === 1 && p2 === 1 && this.sets.length === 2) {
-      this.sets.push({ player1Points: null, player2Points: null });
+    // Caso 1: serve il terzo set
+    if (p1 === 1 && p2 === 1) {
+      if (this.sets.length === 2) {
+        this.sets.push({ player1Points: null, player2Points: null });
+      }
+      return;
+    }
+
+    // Caso 2: match deciso (2–0 o 0–2)
+    if (this.sets.length === 3) {
+      this.sets = this.sets.slice(0, 2); // 🔥 rimuove il 3° set
     }
   }
+
 
   isSetValid(set: { player1Points: number | null; player2Points: number | null }) {
     return validateSet(set.player1Points, set.player2Points, this.maxPoints);
