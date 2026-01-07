@@ -1,59 +1,74 @@
-<h2 class="page-title">Storico Match</h2>
+<section class="history-container">
 
-<div class="history-container">
+  <h2>Storico Match</h2>
 
-  <!-- TOP BAR -->
-  <div class="history-toolbar">
-    <span>Mostra:</span>
-    <button
-      *ngFor="let l of [5,10,20,50]"
-      [class.active]="limit === l"
-      (click)="changeLimit(l)">
-      {{ l }}
-    </button>
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input
+      type="text"
+      placeholder="Cerca giocatore..."
+      [(ngModel)]="search"
+      (input)="applyFilter()"
+    />
+
+    <div class="limits">
+      <span>Mostra:</span>
+      <button
+        *ngFor="let l of [5,10,20,50]"
+        (click)="changeLimit(l)"
+        [class.active]="limit === l"
+      >
+        {{ l }}
+      </button>
+    </div>
   </div>
 
-  <!-- HEADER -->
-  <div class="history-header">
-    <div>Giocatore</div>
-    <div>Risultato</div>
-    <div>Giocatore</div>
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading">
+    Caricamento match...
   </div>
 
-  <!-- ROWS -->
+  <!-- LISTA MATCH -->
+  <div *ngIf="!loading && filteredMatches.length === 0" class="empty">
+    Nessun match trovato
+  </div>
+
   <div
-    *ngFor="let m of matches"
-    class="history-row"
+    *ngFor="let m of filteredMatches"
+    class="match-card"
     (click)="toggle(m._id)"
   >
-    <div class="player">
-      {{ m.players.player1.username }}
-    </div>
-
-    <div class="result">
-      {{ getResult(m) }}
-    </div>
-
-    <div class="player">
-      {{ m.players.player2.username }}
-    </div>
-
-    <div
-      *ngIf="expandedMatchId === m._id"
-      class="sets-detail"
-    >
-      <div *ngFor="let s of m.sets; let i = index">
-        Set {{ i + 1 }} → {{ s.player1Points }} - {{ s.player2Points }}
+    <div class="match-header">
+      <div class="players">
+        <strong>{{ m.players.player1.username }}</strong>
+        vs
+        <strong>{{ m.players.player2.username }}</strong>
       </div>
-      <small>{{ m.createdAt | date:'short' }}</small>
+
+      <div class="result">
+        {{ getResult(m) }}
+      </div>
+    </div>
+
+    <div class="meta">
+      {{ m.createdAt | date:'short' }}
+      •
+      {{ m.sets.length === 1 ? '1 set' : 'Best of 3' }}
+    </div>
+
+    <!-- SET DETTAGLIO -->
+    <div *ngIf="expandedMatchId === m._id" class="sets">
+      <div *ngFor="let s of m.sets; let i = index">
+        Set {{ i + 1 }}: {{ s.player1Points }} - {{ s.player2Points }}
+      </div>
     </div>
   </div>
 
-  <!-- PAGINATION -->
-  <div class="history-pagination">
+  <!-- PAGINAZIONE -->
+  <div class="pagination">
     <button (click)="prevPage()" [disabled]="page === 1">◀</button>
-    <span>Pagina {{ page }} / {{ pages }}</span>
+    Pagina {{ page }} / {{ pages }}
     <button (click)="nextPage()" [disabled]="page === pages">▶</button>
   </div>
 
-</div>
+</section>

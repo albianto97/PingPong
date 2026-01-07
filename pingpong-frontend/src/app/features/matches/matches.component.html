@@ -2,7 +2,7 @@
 
 <section class="card wide">
 
-  <!-- Avversario -->
+  <!-- AVVERSARIO -->
   <div class="form-group">
     <label>Avversario</label>
     <select [(ngModel)]="opponentId">
@@ -16,7 +16,7 @@
   <!-- CONFIG MATCH -->
   <div class="config-row">
 
-    <!-- Formato -->
+    <!-- FORMATO -->
     <div class="form-group">
       <label>Formato</label>
       <select [(ngModel)]="isBestOf3" (change)="updateMatchFormat()">
@@ -25,7 +25,7 @@
       </select>
     </div>
 
-    <!-- Punteggio -->
+    <!-- PUNTEGGIO -->
     <div class="form-group">
       <label>Punteggio set</label>
       <select [(ngModel)]="maxPoints">
@@ -43,36 +43,68 @@
 
   <!-- SET -->
   <div class="sets-container">
-    <div *ngFor="let set of sets; let i = index" class="set-card">
+
+    <div
+      *ngFor="let set of sets; let i = index"
+      class="set-card"
+      [class.invalid]="
+        set.player1Points !== null &&
+        set.player2Points !== null &&
+        !isSetValid(set)
+      "
+    >
 
       <h4>Set {{ i + 1 }}</h4>
 
       <div class="scores">
+
+        <!-- PLAYER 1 -->
         <div>
           <label>Tu</label>
           <input
             type="number"
+            inputmode="numeric"
+            min="0"
             [(ngModel)]="set.player1Points"
             (change)="checkThirdSet()"
           />
         </div>
 
+        <!-- PLAYER 2 -->
         <div>
           <label>Avversario</label>
           <input
             type="number"
+            inputmode="numeric"
+            min="0"
             [(ngModel)]="set.player2Points"
             (change)="checkThirdSet()"
           />
         </div>
+
       </div>
+
+      <!-- ERRORE SET -->
+      <p
+        class="set-error"
+        *ngIf="
+          set.player1Points !== null &&
+          set.player2Points !== null &&
+          !isSetValid(set)
+        "
+      >
+        Punteggio non valido ({{ maxPoints }} con +2)
+      </p>
 
     </div>
   </div>
 
+  <!-- SUBMIT -->
   <button class="primary" (click)="submitMatch()">
     Salva match
   </button>
 
+  <!-- MESSAGGIO GENERALE -->
   <p class="message">{{ message }}</p>
+
 </section>
