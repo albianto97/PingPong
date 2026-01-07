@@ -5,6 +5,8 @@ import { UserService } from '../../core/services/user.service';
 import { MatchService } from '../../core/services/match.service';
 import {AuthService} from '../../core/services/auth.service';
 import {Router} from '@angular/router';
+import { validateSet } from '../../shared/utils/validate-set.util';
+
 
 @Component({
   selector: 'app-matches',
@@ -85,44 +87,60 @@ export class MatchesComponent implements OnInit {
     }
   }
 
+  isSetValid(set: { player1Points: number | null; player2Points: number | null }) {
+    return validateSet(set.player1Points, set.player2Points, this.maxPoints);
+  }
+
+
   submitMatch() {
-    const me = this.authService.getCurrentUser();
-    if (!me || !this.opponentId) {
-      this.message = 'Dati mancanti';
+  const me = this.authService.getCurrentUser();
+  if (!me || !this.opponentId) {
+    this.message = 'Dati mancanti';
+    return;
+  }
+
+  // 🔒 validazione set
+  for (let i = 0; i < this.sets.length; i++) {
+    const set = this.sets[i];
+
+    if (!this.isSetValid(set)) {
+      this.message = `Set ${i + 1} non valido`;
+      return;
+    }
+  }
+
+  const { p1, p2 } = this.getSetWins();
+
+  if (this.isBestOf3) {
+    if (p1 === 1 && p2 === 1) {
+      this.message = 'Serve il terzo set per decidere il match';
       return;
     }
 
-    const { p1, p2 } = this.getSetWins();
-
-    if (this.isBestOf3) {
-      if (p1 === 1 && p2 === 1) {
-        this.message = 'Serve il terzo set per decidere il match';
-        return;
-      }
-
-      if (p1 < 2 && p2 < 2) {
-        this.message = 'Match incompleto';
-        return;
-      }
+    if (p1 < 2 && p2 < 2) {
+      this.message = 'Match incompleto';
+      return;
     }
-
-    this.matchService.createMatch({
-      type: 'SINGLE',
-      players: {
-        player1: me._id,
-        player2: this.opponentId
-      },
-      rules: {
-        maxPoints: this.maxPoints,
-        setsToWin: this.isBestOf3 ? 2 : 1
-      },
-      sets: this.sets
-    }).subscribe({
-      next: () => {
-        this.message = 'Match salvato!';
-        this.router.navigate(['/dashboard']);
-      },
-      error: () => this.message = 'Errore nel salvataggio'
-    });
   }
+
+  this.matchService.createMatch({
+    type: 'SINGLE',
+    players: {
+      player1: me._id,
+      player2: this.opponentId
+    },
+    rules: {
+      maxPoints: this.maxPoints,
+      setsToWin: this.isBestOf3 ? 2 : 1
+    },
+    sets: this.sets
+  }).subscribe({
+    next: () => {
+      this.message = 'Match salvato!';
+      this.router.navigate(['/dashboard']);
+    },
+    error: () => this.message = 'Errore nel salvataggio'
+  });
+}
+
 }
