@@ -9,6 +9,7 @@ exports.createMatch = async (req, res) => {
     try {
         const { type, players, rules, sets } = req.body;
 
+        const validSets = [];
         let p1Sets = 0;
         let p2Sets = 0;
 
@@ -17,6 +18,8 @@ exports.createMatch = async (req, res) => {
                 return res.status(400).json({ message: 'Punteggio set non valido' });
             }
 
+            validSets.push(set);
+
             if (set.player1Points > set.player2Points) p1Sets++;
             else p2Sets++;
 
@@ -24,6 +27,12 @@ exports.createMatch = async (req, res) => {
                 break;
             }
         }
+
+        // ❗ controllo finale: il match deve essere deciso
+        if (p1Sets !== rules.setsToWin && p2Sets !== rules.setsToWin) {
+            return res.status(400).json({ message: 'Match incompleto' });
+        }
+
 
 
         const winner =
