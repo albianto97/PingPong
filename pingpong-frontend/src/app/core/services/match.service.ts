@@ -15,9 +15,9 @@ export class MatchService {
   }
 
   /** Storico completo */
-  getAllMatches(page = 1, limit = 10) {
+  getAllMatches(page = 1, limit = 10, search: string) {
     return this.http.get<any>(
-      `${this.apiUrl}?page=${page}&limit=${limit}`
+      `${this.apiUrl}?page=${page}&limit=${limit}&search=${search}`
     );
   }
 
@@ -31,6 +31,12 @@ export class MatchService {
   getHeadToHead(playerA: string, playerB: string) {
     return this.http.get<any>(
       `${this.apiUrl}/head-to-head/${playerA}/${playerB}`
+    );
+  }
+
+  getMatchesBetween(userA: string, userB: string) {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/between/${userA}/${userB}`
     );
   }
 

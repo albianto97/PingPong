@@ -17,15 +17,13 @@ export class MatchesHistoryComponent implements OnInit {
 
   loading = true;
 
-  // ricerca
-  search = '';
-
   // paginazione
   page = 1;
   limit = 10;
   pages = 1;
 
   expandedMatchId: string | null = null;
+  search = ''
 
   constructor(private matchService: MatchService) {}
 
@@ -36,7 +34,7 @@ export class MatchesHistoryComponent implements OnInit {
   load() {
     this.loading = true;
 
-    this.matchService.getAllMatches(this.page, this.limit)
+    this.matchService.getAllMatches(this.page, this.limit, this.search)
       .subscribe(res => {
         this.matches = res.matches;
         this.pages = res.pages;

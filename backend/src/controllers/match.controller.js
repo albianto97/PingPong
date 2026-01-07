@@ -133,6 +133,16 @@ exports.getLastMatches = async (req, res) => {
     try {
         const userId = req.user.id;
         const limit = parseInt(req.query.limit) || 5;
+        const { search } = req.query;
+
+        const filter = search
+            ? {
+                $or: [
+                    { 'players.player1.username': new RegExp(search, 'i') },
+                    { 'players.player2.username': new RegExp(search, 'i') }
+                ]
+            }
+            : {};
 
         const matches = await Match.find({
             $or: [
@@ -150,6 +160,28 @@ exports.getLastMatches = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch last matches', error });
     }
 };
+
+exports.getMatchesBetweenUsers = async (req, res) => {
+    try {
+        const { userA, userB } = req.params;
+
+        const matches = await Match.find({
+            $or: [
+                { 'players.player1': userA, 'players.player2': userB },
+                { 'players.player1': userB, 'players.player2': userA }
+            ]
+        })
+            .populate('players.player1', 'username')
+            .populate('players.player2', 'username')
+            .sort({ createdAt: -1 })
+            .limit(5);
+
+        res.json(matches);
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to load matches' });
+    }
+};
+
 
 // GET /matches?page=1&limit=10
 exports.getAllMatches = async (req, res) => {

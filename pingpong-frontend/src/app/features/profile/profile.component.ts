@@ -30,17 +30,21 @@ export class ProfileComponent implements OnInit {
 
 
   ngOnInit() {
-    const userId = this.route.snapshot.paramMap.get('id')!;
+    const profileId = this.route.snapshot.paramMap.get('id')!;
+    const me = this.authService.getCurrentUser();
 
-    this.userService.getUserById(userId).subscribe(user => {
+    this.userService.getUserById(profileId).subscribe(user => {
       this.user = user;
     });
 
-    this.matchService.getMatchesByPlayer(userId).subscribe(matches => {
-      this.matches = matches;
-      this.loading = false;
-    });
+    this.matchService
+      .getMatchesBetween(me._id, profileId)
+      .subscribe(matches => {
+        this.matches = matches;
+        this.loading = false;
+      });
   }
+
 
   getResult(match: any) {
     let a = 0;
