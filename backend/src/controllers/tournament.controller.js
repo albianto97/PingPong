@@ -1,6 +1,9 @@
 const Tournament = require('../models/tournament.model');
 const { nextPowerOfTwo, shuffle } = require('../utils/bracket.util');
 const Match = require('../models/match.model');
+const TournamentStanding = require('../models/tournamentStanding.model');
+
+
 
 exports.getBracket = async (req, res) => {
     const tournamentId = req.params.id;
