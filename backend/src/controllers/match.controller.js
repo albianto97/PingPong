@@ -133,16 +133,6 @@ exports.getLastMatches = async (req, res) => {
     try {
         const userId = req.user.id;
         const limit = parseInt(req.query.limit) || 5;
-        const { search } = req.query;
-
-        const filter = search
-            ? {
-                $or: [
-                    { 'players.player1.username': new RegExp(search, 'i') },
-                    { 'players.player2.username': new RegExp(search, 'i') }
-                ]
-            }
-            : {};
 
         const matches = await Match.find({
             $or: [
@@ -189,15 +179,35 @@ exports.getAllMatches = async (req, res) => {
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
+        const search = req.query.search;
+
+        let filter = {};
+
+        // 🔍 filtro per username (opzionale)
+        if (search) {
+            const users = await User.find({
+                username: { $regex: search, $options: 'i' }
+            }).select('_id');
+
+            const userIds = users.map(u => u._id);
+
+            filter = {
+                $or: [
+                    { 'players.player1': { $in: userIds } },
+                    { 'players.player2': { $in: userIds } }
+                ]
+            };
+        }
 
         const [matches, total] = await Promise.all([
-            Match.find()
+            Match.find(filter)
                 .populate('players.player1', 'username')
                 .populate('players.player2', 'username')
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit),
-            Match.countDocuments()
+
+            Match.countDocuments(filter)
         ]);
 
         res.json({
@@ -210,6 +220,7 @@ exports.getAllMatches = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch matches', err });
     }
 };
+
 
 exports.getMatchesByPlayer = async (req, res) => {
     try {

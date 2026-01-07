@@ -15,7 +15,7 @@ export class MatchService {
   }
 
   /** Storico completo */
-  getAllMatches(page = 1, limit = 10, search: string) {
+  getAllMatches(page = 1, limit = 10, search = '') {
     return this.http.get<any>(
       `${this.apiUrl}?page=${page}&limit=${limit}&search=${search}`
     );
