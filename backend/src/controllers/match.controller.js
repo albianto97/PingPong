@@ -39,12 +39,13 @@ exports.createMatch = async (req, res) => {
             p1Sets > p2Sets ? players.player1 : players.player2;
 
         const match = await Match.create({
-            type,
-            players,
-            rules,
-            sets,
-            winner
+          type,
+          players,
+          rules,
+          sets: validSets,
+          winner
         });
+
 
         // ELO & stats (singolo)
         // ELO & stats (singolo)
