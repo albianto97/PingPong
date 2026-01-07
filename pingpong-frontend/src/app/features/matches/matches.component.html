@@ -63,6 +63,7 @@
           <label>Tu</label>
           <input
             type="number"
+            inputmode="numeric"
             min="0"
             [(ngModel)]="set.player1Points"
             (change)="checkThirdSet()"
@@ -74,6 +75,7 @@
           <label>Avversario</label>
           <input
             type="number"
+            inputmode="numeric"
             min="0"
             [(ngModel)]="set.player2Points"
             (change)="checkThirdSet()"
