@@ -8,7 +8,7 @@
       type="text"
       placeholder="Cerca giocatore..."
       [(ngModel)]="search"
-      (input)="applyFilter()"
+      (ngModelChange)="onSearchChange($event)"
     />
 
     <div class="limits">
@@ -28,13 +28,14 @@
     Caricamento match...
   </div>
 
-  <!-- LISTA MATCH -->
-  <div *ngIf="!loading && filteredMatches.length === 0" class="empty">
+  <!-- EMPTY -->
+  <div *ngIf="!loading && matches.length === 0" class="empty">
     Nessun match trovato
   </div>
 
+  <!-- LISTA MATCH -->
   <div
-    *ngFor="let m of filteredMatches"
+    *ngFor="let m of matches"
     class="match-card"
     (click)="toggle(m._id)"
   >
@@ -65,7 +66,7 @@
   </div>
 
   <!-- PAGINAZIONE -->
-  <div class="pagination">
+  <div class="pagination" *ngIf="pages > 1">
     <button (click)="prevPage()" [disabled]="page === 1">◀</button>
     Pagina {{ page }} / {{ pages }}
     <button (click)="nextPage()" [disabled]="page === pages">▶</button>

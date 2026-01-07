@@ -13,8 +13,6 @@ import { MatchService } from '../../core/services/match.service';
 export class MatchesHistoryComponent implements OnInit {
 
   matches: any[] = [];
-  filteredMatches: any[] = [];
-
   loading = true;
 
   // paginazione
@@ -23,7 +21,7 @@ export class MatchesHistoryComponent implements OnInit {
   pages = 1;
 
   expandedMatchId: string | null = null;
-  search = ''
+  search = '';
 
   constructor(private matchService: MatchService) {}
 
@@ -31,28 +29,28 @@ export class MatchesHistoryComponent implements OnInit {
     this.load();
   }
 
+  /* =========================
+     LOAD MATCHES (backend filtered)
+     ========================= */
   load() {
     this.loading = true;
 
-    this.matchService.getAllMatches(this.page, this.limit, this.search)
+    this.matchService
+      .getAllMatches(this.page, this.limit, this.search)
       .subscribe(res => {
         this.matches = res.matches;
         this.pages = res.pages;
-        this.applyFilter();
         this.loading = false;
       });
   }
 
   /* =========================
-     FILTRO RICERCA
+     SEARCH (RESET PAGE)
      ========================= */
-  applyFilter() {
-    const term = this.search.toLowerCase().trim();
-
-    this.filteredMatches = this.matches.filter(m =>
-      m.players.player1.username.toLowerCase().includes(term) ||
-      m.players.player2.username.toLowerCase().includes(term)
-    );
+  onSearchChange(value: string) {
+    this.search = value;
+    this.page = 1; // 🔥 FONDAMENTALE
+    this.load();
   }
 
   /* =========================
