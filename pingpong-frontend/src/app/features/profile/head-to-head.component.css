@@ -1,0 +1,44 @@
+.h2h {
+  text-align: center;
+}
+
+.h2h-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.h2h-col {
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.h2h-col.me {
+  background: #e3f2fd;
+}
+
+.h2h-col.opp {
+  background: #fdecea;
+}
+
+.big {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.vs {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.sets, .points {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.last {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #666;
+}

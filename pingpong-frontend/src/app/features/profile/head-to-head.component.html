@@ -1,20 +1,35 @@
-<section class="card">
+<section class="card h2h">
   <h3>Head to Head</h3>
 
   <div *ngIf="loading">Caricamento...</div>
 
-  <div *ngIf="!loading && stats">
-    <p><strong>Match:</strong> {{ stats.total }}</p>
+  <div *ngIf="!loading && stats" class="h2h-grid">
 
-    <div class="grid">
-      <div>Vittorie: {{ stats.winsA }}</div>
-      <div>Sconfitte: {{ stats.winsB }}</div>
-      <div>Set: {{ stats.setsA }} - {{ stats.setsB }}</div>
-      <div>Punti: {{ stats.pointsA }} - {{ stats.pointsB }}</div>
+    <div class="h2h-col me">
+      <h4>Tu</h4>
+      <div class="big">{{ stats.winsA }}</div>
+      <small>Vittorie</small>
     </div>
 
-    <p *ngIf="stats.lastMatch">
-      Ultimo match: {{ stats.lastMatch.createdAt | date:'short' }}
-    </p>
+    <div class="h2h-col center">
+      <div class="vs">VS</div>
+      <div class="sets">
+        Set {{ stats.setsA }} - {{ stats.setsB }}
+      </div>
+      <div class="points">
+        Punti {{ stats.pointsA }} - {{ stats.pointsB }}
+      </div>
+    </div>
+
+    <div class="h2h-col opp">
+      <h4>Avversario</h4>
+      <div class="big">{{ stats.winsB }}</div>
+      <small>Vittorie</small>
+    </div>
+
   </div>
+
+  <p class="last" *ngIf="stats?.lastMatch">
+    Ultimo match: {{ stats.lastMatch.createdAt | date:'short' }}
+  </p>
 </section>
