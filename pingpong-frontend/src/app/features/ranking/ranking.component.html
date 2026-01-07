@@ -1,15 +1,15 @@
-<ul class="ranking-list">
+<ul class="ranking">
   <li
-    *ngFor="let player of ranking; let i = index"
-    [routerLink]="['/profile', player.id]"
-    class="ranking-item"
-    [class.me]="player.id === currentUserId"
+    *ngFor="let player of ranking"
+    [class.me]="isMe(player)"
+    [class.clickable]="!isMe(player)"
+    (click)="!isMe(player) && goToProfile(player.id)"
   >
-    <span class="pos">#{{ i + 1 }}</span>
+    <span class="position">#{{ player.position }}</span>
 
     <span class="name">
+      <span *ngIf="isMe(player)">👉</span>
       {{ player.username }}
-      <span *ngIf="player._id === currentUserId">👋</span>
     </span>
 
     <span class="elo">{{ player.eloRating }}</span>

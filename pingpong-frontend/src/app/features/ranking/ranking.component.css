@@ -1,46 +1,48 @@
-.ranking-container {
-  padding-bottom: 16px;
-}
-
-h2 {
-  margin-bottom: 12px;
-}
-
-.ranking-list {
+.ranking {
   list-style: none;
   padding: 0;
-  margin: 0;
+  border-bottom: 1px solid black;
 }
 
-.ranking-list li {
-  display: flex;
-  justify-content: space-between;
+.ranking li {
+  display: grid;
+  grid-template-columns: 50px 1fr 80px;
+  padding: 12px 16px;
+  border-bottom: 1px solid black;
   align-items: center;
-  padding: 12px;
-  border-radius: 10px;
-  background: white;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: background 0.2s;
 }
 
-.ranking-list li.me {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: white;
+/* 👤 IO */
+.ranking li.me {
+  background: linear-gradient(135deg, #e0f2fe, black);
   font-weight: bold;
+  cursor: default;
 }
 
-.pos {
-  width: 40px;
-  opacity: 0.7;
+/* 👆 NON cliccabile */
+.ranking li.me:hover {
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+}
+
+/* 🔗 altri utenti */
+.ranking li.clickable {
+  cursor: pointer;
+}
+
+.ranking li.clickable:hover {
+  background: #f9fafb;
+}
+
+.position {
+  color: #64748b;
 }
 
 .name {
-  flex: 1;
+  font-size: 15px;
 }
 
 .elo {
-  font-weight: bold;
-}
-.ranking-item {
-  cursor: pointer;
+  text-align: right;
+  font-weight: 600;
 }
