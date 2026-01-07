@@ -1,0 +1,10 @@
+<h2>Bracket torneo</h2>
+
+<app-tournament-bracket
+  *ngIf="rounds.length > 0"
+  [rounds]="rounds">
+</app-tournament-bracket>
+
+<p *ngIf="rounds.length === 0">
+  Nessun match ancora generato
+</p>

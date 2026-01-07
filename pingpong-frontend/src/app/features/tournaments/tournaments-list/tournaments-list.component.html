@@ -1,0 +1,27 @@
+<section class="container">
+  <h2>Tornei</h2>
+
+  <div *ngIf="loading">Caricamento tornei...</div>
+
+  <div *ngIf="!loading && tournaments.length === 0">
+    Nessun torneo disponibile
+  </div>
+
+  <div
+    *ngFor="let t of tournaments"
+    class="card"
+    (click)="open(t._id)"
+  >
+    <h3>{{ t.name }}</h3>
+
+    <p>
+      {{ t.type === 'ROUND_ROBIN' ? 'Girone' : 'Eliminazione diretta' }}
+    </p>
+
+    <span class="status">{{ t.status }}</span>
+
+    <small>
+      {{ t.players.length }} giocatori
+    </small>
+  </div>
+</section>
