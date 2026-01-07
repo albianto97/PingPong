@@ -38,6 +38,14 @@ const matchSchema = new mongoose.Schema(
         playedAt: {
             type: Date,
             default: Date.now
+        },
+        tournament: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Tournament',
+            default: null
+        }, round: {
+            type: Number,
+            default: 1
         }
     },
     { timestamps: true }

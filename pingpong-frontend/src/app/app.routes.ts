@@ -15,6 +15,8 @@ import { RankingComponent } from './features/ranking/ranking.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import {MatchesComponent} from './features/matches/matches.component';
 import {MatchesHistoryComponent} from './features/matches/matches-history.component';
+import {TournamentsListComponent} from './features/tournaments/tournaments-list/tournaments-list.component';
+import {TournamentDetailComponent} from './features/tournaments/tournament-detail/tournament-detail.component';
 
 export const routes: Routes = [
 
@@ -40,7 +42,9 @@ export const routes: Routes = [
       { path: 'profile/:id', component: ProfileComponent },
       { path: 'matches', component: MatchesComponent },
       { path: 'matches/history', component: MatchesHistoryComponent },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'tournaments', component: TournamentsListComponent},
+      { path: 'tournaments/:id', component: TournamentDetailComponent}
     ]
   },
 

@@ -4,6 +4,8 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const matchRoutes = require('./routes/match.routes');
+const tournamentRoutes = require('./routes/tournament.routes');
+
 
 
 
@@ -15,6 +17,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/matches', matchRoutes);
+app.use('/api/tournaments', tournamentRoutes);
+
 
 
 app.get('/api/health', (req, res) => {

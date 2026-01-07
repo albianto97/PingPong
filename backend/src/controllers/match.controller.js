@@ -2,53 +2,48 @@ const Match = require('../models/match.model');
 const User = require('../models/user.model');
 const { calculateElo } = require('../services/elo.service');
 const validateSet = require('../utils/validateSet');
+const Tournament = require('../models/tournament.model');
+const TournamentStanding = require('../models/tournamentStanding.model');
 
 
+
+const {
+    advanceEliminationTournament
+} = require('./tournament.controller');
 
 exports.createMatch = async (req, res) => {
     try {
-        const { type, players, rules, sets } = req.body;
+        const { type, players, rules, sets, tournament, round } = req.body;
 
-        const validSets = [];
         let p1Sets = 0;
         let p2Sets = 0;
 
         for (const set of sets) {
             if (!validateSet(set, rules)) {
-                return res.status(400).json({ message: 'Punteggio set non valido' });
+                return res.status(400).json({
+                    message: 'Punteggio set non valido'
+                });
             }
-
-            validSets.push(set);
 
             if (set.player1Points > set.player2Points) p1Sets++;
             else p2Sets++;
-
-            if (p1Sets === rules.setsToWin || p2Sets === rules.setsToWin) {
-                break;
-            }
         }
-
-        // ❗ controllo finale: il match deve essere deciso
-        if (p1Sets !== rules.setsToWin && p2Sets !== rules.setsToWin) {
-            return res.status(400).json({ message: 'Match incompleto' });
-        }
-
-
 
         const winner =
             p1Sets > p2Sets ? players.player1 : players.player2;
 
+        // 1️⃣ CREA MATCH
         const match = await Match.create({
-          type,
-          players,
-          rules,
-          sets: validSets,
-          winner
+            type,
+            players,
+            rules,
+            sets,
+            winner,
+            tournament,
+            round
         });
 
-
-        // ELO & stats (singolo)
-        // ELO & stats (singolo)
+        // 2️⃣ ELO + STATS GLOBALI
         if (type === 'SINGLE') {
             const user1 = await User.findById(players.player1);
             const user2 = await User.findById(players.player2);
@@ -76,7 +71,7 @@ exports.createMatch = async (req, res) => {
                 user1.stats.losses++;
             }
 
-            // 🔴 QUESTO BLOCCO QUI (CORRETTO)
+            // SET & PUNTI
             for (const set of sets) {
                 user1.stats.pointsFor += set.player1Points;
                 user1.stats.pointsAgainst += set.player2Points;
@@ -97,8 +92,62 @@ exports.createMatch = async (req, res) => {
             await user2.save();
         }
 
+        // 3️⃣ TORNEO: STANDING + AVANZAMENTO
+        if (tournament) {
+            const t = await Tournament.findById(tournament);
+
+            // 📊 STANDING
+            const s1 = await TournamentStanding.findOne({
+                tournament,
+                player: players.player1
+            });
+
+            const s2 = await TournamentStanding.findOne({
+                tournament,
+                player: players.player2
+            });
+
+            s1.matchesPlayed++;
+            s2.matchesPlayed++;
+
+            if (winner.toString() === players.player1.toString()) {
+                s1.matchesWon++;
+                s2.matchesLost++;
+            } else {
+                s2.matchesWon++;
+                s1.matchesLost++;
+            }
+
+            for (const set of sets) {
+                s1.pointsFor += set.player1Points;
+                s1.pointsAgainst += set.player2Points;
+
+                s2.pointsFor += set.player2Points;
+                s2.pointsAgainst += set.player1Points;
+
+                if (set.player1Points > set.player2Points) {
+                    s1.setsWon++;
+                    s2.setsLost++;
+                } else {
+                    s2.setsWon++;
+                    s1.setsLost++;
+                }
+            }
+
+            await s1.save();
+            await s2.save();
+
+            // 🏆 AVANZAMENTO BRACKET
+            if (t.type === 'ELIMINATION') {
+                await advanceEliminationTournament(
+                    tournament,
+                    round
+                );
+            }
+        }
 
         res.status(201).json(match);
+
     } catch (err) {
         res.status(500).json({
             message: 'Match creation failed',
@@ -106,6 +155,7 @@ exports.createMatch = async (req, res) => {
         });
     }
 };
+
 // STORICO MATCH UTENTE
 exports.getMyMatches = async (req, res) => {
     try {
