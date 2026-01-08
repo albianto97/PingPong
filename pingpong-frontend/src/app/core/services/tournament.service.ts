@@ -9,15 +9,25 @@ export class TournamentService {
 
   constructor(private http: HttpClient) {}
 
-  getBracket(tournamentId: string) {
-    return this.http.get<{ rounds: any[] }>(
-      `${this.apiUrl}/${tournamentId}/bracket`
-    );
-  }
-
   getAll() {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+  getById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
 
+  getBracket(id: string) {
+    return this.http.get<{ rounds: any[] }>(
+      `${this.apiUrl}/${id}/bracket`
+    );
+  }
+
+  generateMatches(id: string) {
+    return this.http.post(
+      `${this.apiUrl}/${id}/generate-matches`,
+      {}
+    );
+  }
 }
+
