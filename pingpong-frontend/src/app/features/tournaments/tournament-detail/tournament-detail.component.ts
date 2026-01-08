@@ -1,50 +1,60 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TournamentService } from '../tournament.service';
 import { TournamentBracketComponent } from '../tournament-bracket/tournament-bracket.component';
-import {TournamentService} from '../../../core/services/tournament.service';
-import {FormsModule} from '@angular/forms';
-
-
-
 
 @Component({
   selector: 'app-tournament-detail',
   standalone: true,
-  imports: [CommonModule, TournamentBracketComponent, FormsModule],
+  imports: [CommonModule, TournamentBracketComponent],
   templateUrl: './tournament-detail.component.html',
   styleUrls: ['./tournament-detail.component.css']
 })
 export class TournamentDetailComponent implements OnInit {
 
-  tournamentId!: string;
+  tournament: any;
   rounds: any[] = [];
-  selectedMatch: {
-    player1: string;
-    player2: string;
-    round: number;
-  } | null = null;
-
-  sets = [
-    { player1Points: null, player2Points: null }
-  ];
-
-  maxPoints = 11;
+  loading = true;
+  generating = false;
 
   constructor(
     private route: ActivatedRoute,
-    private service: TournamentService,
+    private service: TournamentService
   ) {}
 
-
   ngOnInit() {
-    const tournamentId = this.route.snapshot.paramMap.get('id')!;
+    const id = this.route.snapshot.paramMap.get('id')!;
+    this.loadTournament(id);
+  }
 
-    this.service.getBracket(tournamentId).subscribe(res => {
+  loadTournament(id: string) {
+    this.loading = true;
+
+    this.service.getById(id).subscribe(t => {
+      this.tournament = t;
+
+      if (t.status !== 'DRAFT') {
+        this.loadBracket(id);
+      }
+
+      this.loading = false;
+    });
+  }
+
+  loadBracket(id: string) {
+    this.service.getBracket(id).subscribe(res => {
       this.rounds = res.rounds;
     });
   }
 
+  generateMatches() {
+    this.generating = true;
 
-
+    this.service.generateMatches(this.tournament._id)
+      .subscribe(() => {
+        this.loadTournament(this.tournament._id);
+        this.generating = false;
+      });
+  }
 }
