@@ -1,1 +1,22 @@
+<div class="modal">
+
+  <h3>Inserisci risultato</h3>
+
+  <p>
+    {{ match.players.player1.username }}
+    vs
+    {{ match.players.player2.username }}
+  </p>
+
+  <div class="scores">
+    <input type="number" [(ngModel)]="sets[0].player1Points">
+    <input type="number" [(ngModel)]="sets[0].player2Points">
+  </div>
+
+  <div class="actions">
+    <button (click)="save()">Salva</button>
+    <button class="ghost" (click)="closed.emit()">Annulla</button>
+  </div>
+
+</div>
 
