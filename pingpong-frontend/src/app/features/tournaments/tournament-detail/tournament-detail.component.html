@@ -1,10 +1,30 @@
-<h2>Bracket torneo</h2>
+<div *ngIf="loading">Caricamento torneo...</div>
 
-<app-tournament-bracket
-  *ngIf="rounds.length > 0"
-  [rounds]="rounds">
-</app-tournament-bracket>
+<div *ngIf="!loading && tournament" class="tournament-detail">
 
-<p *ngIf="rounds.length === 0">
-  Nessun match ancora generato
-</p>
+  <header class="header">
+    <h2>{{ tournament.name }}</h2>
+    <span class="badge">{{ tournament.type }}</span>
+  </header>
+
+  <!-- PULSANTE GENERA MATCH -->
+  <button
+    *ngIf="tournament.status === 'DRAFT'"
+    class="primary"
+    (click)="generateMatches()"
+    [disabled]="generating">
+
+    {{ generating ? 'Generazione in corso...' : 'Genera match' }}
+  </button>
+
+  <!-- BRACKET -->
+  <app-tournament-bracket
+    *ngIf="rounds.length > 0"
+    [rounds]="rounds">
+  </app-tournament-bracket>
+
+  <p *ngIf="tournament.status !== 'DRAFT' && rounds.length === 0">
+    Nessun match disponibile
+  </p>
+
+</div>
