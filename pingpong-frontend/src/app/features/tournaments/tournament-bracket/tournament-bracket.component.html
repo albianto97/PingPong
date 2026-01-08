@@ -18,6 +18,23 @@
       </small>
     </div>
 
+      <div
+        class="player"
+        [class.winner]="m.winner === m.players.player1?._id">
+        {{ m.players.player1?.username || 'BYE' }}
+      </div>
+
+      <div
+        class="player"
+        [class.winner]="m.winner === m.players.player2?._id">
+        {{ m.players.player2?.username || 'BYE' }}
+      </div>
+
+      <div class="status">
+        {{ m.winner ? '✔ Finito' : '⏳ In attesa' }}
+      </div>
+
+
   </div>
 
 </div>
