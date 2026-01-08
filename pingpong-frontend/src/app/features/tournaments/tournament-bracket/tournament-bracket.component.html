@@ -1,34 +1,30 @@
 <div class="bracket">
 
-  <div
-    class="round"
-    *ngFor="let round of rounds">
-
-    <h3>Round {{ round.round }}</h3>
+  <div *ngFor="let r of rounds" class="round">
+    <h4>Round {{ r.round }}</h4>
 
     <div
-      class="match"
-      *ngFor="let match of round.matches">
+      *ngFor="let m of r.matches"
+      class="match-card"
+      [class.clickable]="!m.winner"
+      (click)="openMatch(m)">
 
-      <div class="player">
-        {{ match.players.player1?.username || 'BYE' }}
-      </div>
-
+      <div>{{ m.players.player1?.username || 'BYE' }}</div>
       <div class="vs">vs</div>
+      <div>{{ m.players.player2?.username || 'BYE' }}</div>
 
-      <div class="player">
-        {{ match.players.player2?.username || 'BYE' }}
-      </div>
-
-      <div class="winner" *ngIf="match.winner">
-        🏆
-        {{ match.winner === match.players.player1?._id
-        ? match.players.player1.username
-        : match.players.player2.username }}
-      </div>
-
+      <small *ngIf="m.winner">
+        Winner: {{ m.winner.username }}
+      </small>
     </div>
 
   </div>
 
 </div>
+
+<app-tournament-match-form
+  *ngIf="selectedMatch"
+  [match]="selectedMatch"
+  (closed)="selectedMatch = null"
+  (saved)="onMatchSaved()">
+</app-tournament-match-form>
