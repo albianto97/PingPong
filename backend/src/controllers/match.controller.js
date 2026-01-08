@@ -4,7 +4,7 @@ const { calculateElo } = require('../services/elo.service');
 const validateSet = require('../utils/validateSet');
 const Tournament = require('../models/tournament.model');
 const TournamentStanding = require('../models/tournamentStanding.model');
-const { advanceEliminationTournament } =   require('./tournament.controller');
+const advanceEliminationTournament =   require('./tournament.controller');
 
 exports.createMatch = async (req, res) => {
     try {
