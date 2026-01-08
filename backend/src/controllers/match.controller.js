@@ -4,152 +4,158 @@ const { calculateElo } = require('../services/elo.service');
 const validateSet = require('../utils/validateSet');
 const Tournament = require('../models/tournament.model');
 const TournamentStanding = require('../models/tournamentStanding.model');
-const advanceEliminationTournament =   require('./tournament.controller');
+
+// ⚠️ IMPORT CORRETTO
+const {
+  advanceEliminationTournament
+} = require('./tournament.controller');
 
 exports.createMatch = async (req, res) => {
-    try {
-        const { type, players, rules, sets, tournament, round } = req.body;
+  try {
+    const { type, players, rules, sets, tournament, round } = req.body;
 
-        let p1Sets = 0;
-        let p2Sets = 0;
+    let p1Sets = 0;
+    let p2Sets = 0;
 
-        for (const set of sets) {
-            if (!validateSet(set, rules)) {
-                return res.status(400).json({
-                    message: 'Punteggio set non valido'
-                });
-            }
-
-            if (set.player1Points > set.player2Points) p1Sets++;
-            else p2Sets++;
-        }
-
-        const winner =
-            p1Sets > p2Sets ? players.player1 : players.player2;
-
-        // 1️⃣ CREA MATCH
-        const match = await Match.create({
-            type,
-            players,
-            rules,
-            sets,
-            winner,
-            tournament,
-            round
+    for (const set of sets) {
+      if (!validateSet(set, rules)) {
+        return res.status(400).json({
+          message: 'Punteggio set non valido'
         });
+      }
 
-        // 2️⃣ ELO + STATS GLOBALI
-        if (type === 'SINGLE') {
-            const user1 = await User.findById(players.player1);
-            const user2 = await User.findById(players.player2);
-
-            const resultA =
-                winner.toString() === user1._id.toString() ? 1 : 0;
-
-            const { newRatingA, newRatingB } = calculateElo(
-                user1.eloRating,
-                user2.eloRating,
-                resultA
-            );
-
-            user1.eloRating = newRatingA;
-            user2.eloRating = newRatingB;
-
-            user1.stats.matchesPlayed++;
-            user2.stats.matchesPlayed++;
-
-            if (resultA) {
-                user1.stats.wins++;
-                user2.stats.losses++;
-            } else {
-                user2.stats.wins++;
-                user1.stats.losses++;
-            }
-
-            // SET & PUNTI
-            for (const set of sets) {
-                user1.stats.pointsFor += set.player1Points;
-                user1.stats.pointsAgainst += set.player2Points;
-
-                user2.stats.pointsFor += set.player2Points;
-                user2.stats.pointsAgainst += set.player1Points;
-
-                if (set.player1Points > set.player2Points) {
-                    user1.stats.setsWon++;
-                    user2.stats.setsLost++;
-                } else {
-                    user2.stats.setsWon++;
-                    user1.stats.setsLost++;
-                }
-            }
-
-            await user1.save();
-            await user2.save();
-        }
-
-        // 3️⃣ TORNEO: STANDING + AVANZAMENTO
-        if (tournament) {
-            const t = await Tournament.findById(tournament);
-
-            // 📊 STANDING
-            const s1 = await TournamentStanding.findOne({
-                tournament,
-                player: players.player1
-            });
-
-            const s2 = await TournamentStanding.findOne({
-                tournament,
-                player: players.player2
-            });
-
-            s1.matchesPlayed++;
-            s2.matchesPlayed++;
-
-            if (winner.toString() === players.player1.toString()) {
-                s1.matchesWon++;
-                s2.matchesLost++;
-            } else {
-                s2.matchesWon++;
-                s1.matchesLost++;
-            }
-
-            for (const set of sets) {
-                s1.pointsFor += set.player1Points;
-                s1.pointsAgainst += set.player2Points;
-
-                s2.pointsFor += set.player2Points;
-                s2.pointsAgainst += set.player1Points;
-
-                if (set.player1Points > set.player2Points) {
-                    s1.setsWon++;
-                    s2.setsLost++;
-                } else {
-                    s2.setsWon++;
-                    s1.setsLost++;
-                }
-            }
-
-            await s1.save();
-            await s2.save();
-
-            // 🏆 AVANZAMENTO BRACKET
-            if (t.type === 'ELIMINATION') {
-                await advanceEliminationTournament(
-                    tournament,
-                    round
-                );
-            }
-        }
-
-        res.status(201).json(match);
-
-    } catch (err) {
-        res.status(500).json({
-            message: 'Match creation failed',
-            error: err
-        });
+      if (set.player1Points > set.player2Points) p1Sets++;
+      else p2Sets++;
     }
+
+    if (p1Sets === p2Sets) {
+      return res.status(400).json({
+        message: 'Il match non può finire in pareggio'
+      });
+    }
+
+    const winner =
+      p1Sets > p2Sets ? players.player1 : players.player2;
+
+    // 1️⃣ CREA MATCH
+    const match = await Match.create({
+      type,
+      players,
+      rules,
+      sets,
+      winner,
+      tournament: tournament || null,
+      round: round || null
+    });
+
+    // 2️⃣ ELO + STATS GLOBALI (❌ NO TORNEI)
+    if (type === 'SINGLE' && !tournament) {
+      const user1 = await User.findById(players.player1);
+      const user2 = await User.findById(players.player2);
+
+      const resultA =
+        winner.toString() === user1._id.toString() ? 1 : 0;
+
+      const { newRatingA, newRatingB } = calculateElo(
+        user1.eloRating,
+        user2.eloRating,
+        resultA
+      );
+
+      user1.eloRating = newRatingA;
+      user2.eloRating = newRatingB;
+
+      user1.stats.matchesPlayed++;
+      user2.stats.matchesPlayed++;
+
+      if (resultA) {
+        user1.stats.wins++;
+        user2.stats.losses++;
+      } else {
+        user2.stats.wins++;
+        user1.stats.losses++;
+      }
+
+      for (const set of sets) {
+        user1.stats.pointsFor += set.player1Points;
+        user1.stats.pointsAgainst += set.player2Points;
+
+        user2.stats.pointsFor += set.player2Points;
+        user2.stats.pointsAgainst += set.player1Points;
+
+        if (set.player1Points > set.player2Points) {
+          user1.stats.setsWon++;
+          user2.stats.setsLost++;
+        } else {
+          user2.stats.setsWon++;
+          user1.stats.setsLost++;
+        }
+      }
+
+      await user1.save();
+      await user2.save();
+    }
+
+    // 3️⃣ TORNEO: STANDINGS + AVANZAMENTO
+    if (tournament) {
+      const t = await Tournament.findById(tournament);
+
+      const s1 = await TournamentStanding.findOne({
+        tournament,
+        player: players.player1
+      });
+
+      const s2 = await TournamentStanding.findOne({
+        tournament,
+        player: players.player2
+      });
+
+      s1.matchesPlayed++;
+      s2.matchesPlayed++;
+
+      if (winner.toString() === players.player1.toString()) {
+        s1.matchesWon++;
+        s2.matchesLost++;
+      } else {
+        s2.matchesWon++;
+        s1.matchesLost++;
+      }
+
+      for (const set of sets) {
+        s1.pointsFor += set.player1Points;
+        s1.pointsAgainst += set.player2Points;
+
+        s2.pointsFor += set.player2Points;
+        s2.pointsAgainst += set.player1Points;
+
+        if (set.player1Points > set.player2Points) {
+          s1.setsWon++;
+          s2.setsLost++;
+        } else {
+          s2.setsWon++;
+          s1.setsLost++;
+        }
+      }
+
+      await s1.save();
+      await s2.save();
+
+      // 🏆 AVANZAMENTO ELIMINATION
+      if (t.type === 'ELIMINATION') {
+        await advanceEliminationTournament(tournament, round);
+      }
+    }
+
+    res.status(201).json(match);
+
+  } catch (err) {
+    res.status(500).json({
+      message: 'Match creation failed',
+      error: err
+    });
+  }
 };
+
 
 // STORICO MATCH UTENTE
 exports.getMyMatches = async (req, res) => {
