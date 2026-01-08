@@ -23,4 +23,8 @@ export class TournamentBracketComponent {
     this.selectedMatch = null;
     location.reload(); // semplice per ora
   }
+
+  isWinner(match: any, playerId: string) {
+    return match.winner && match.winner === playerId;
+  }
 }
