@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import {TournamentService} from '../../../core/services/tournament.service';
+import {Router, RouterLink} from '@angular/router';
+import { TournamentService } from '../../../core/services/tournament.service';
 
 @Component({
   selector: 'app-tournaments-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './tournaments-list.component.html',
   styleUrls: ['./tournaments-list.component.css']
 })
@@ -21,9 +21,12 @@ export class TournamentsListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.service.getAll().subscribe((res: any[]) => {
-      this.tournaments = res;
-      this.loading = false;
+    this.service.getAll().subscribe({
+      next: res => {
+        this.tournaments = res;
+        this.loading = false;
+      },
+      error: () => this.loading = false
     });
   }
 

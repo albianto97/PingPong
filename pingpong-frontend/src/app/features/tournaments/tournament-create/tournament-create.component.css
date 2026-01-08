@@ -1,0 +1,23 @@
+.players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.player {
+  padding: 8px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  cursor: pointer;
+  text-align: center;
+}
+
+.player.selected {
+  background: #2563eb;
+  color: white;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 8px;
+}

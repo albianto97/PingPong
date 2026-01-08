@@ -1,1 +1,34 @@
-<p>tournament-create works!</p>
+<section class="card">
+  <h2>Crea Torneo</h2>
+
+  <div class="form-group">
+    <label>Nome torneo</label>
+    <input [(ngModel)]="name" />
+  </div>
+
+  <div class="form-group">
+    <label>Tipo</label>
+    <select [(ngModel)]="type">
+      <option value="ELIMINATION">Eliminazione diretta</option>
+      <option value="ROUND_ROBIN">Girone</option>
+    </select>
+  </div>
+
+  <h3>Giocatori</h3>
+
+  <div class="players">
+    <div
+      *ngFor="let p of players"
+      class="player"
+      [class.selected]="selectedPlayers.includes(p._id)"
+      (click)="togglePlayer(p._id)">
+      {{ p.username }}
+    </div>
+  </div>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <button class="primary" (click)="create()">
+    Crea torneo
+  </button>
+</section>

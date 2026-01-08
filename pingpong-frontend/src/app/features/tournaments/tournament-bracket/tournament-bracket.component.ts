@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TournamentMatchFormComponent } from '../tournament-match-form/tournament-match-form.component';
+import {TournamentMatchFormComponent} from '../tournament-form/tournament-match-form.component';
 
 @Component({
   selector: 'app-tournament-bracket',

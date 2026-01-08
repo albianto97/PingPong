@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TournamentService } from '../tournament.service';
 import { TournamentBracketComponent } from '../tournament-bracket/tournament-bracket.component';
+import { TournamentService } from '../../../core/services/tournament.service';
 
 @Component({
   selector: 'app-tournament-detail',
@@ -34,8 +34,12 @@ export class TournamentDetailComponent implements OnInit {
     this.service.getById(id).subscribe(t => {
       this.tournament = t;
 
+      console.log('STATUS TORNEO:', t.status);
+
       if (t.status !== 'DRAFT') {
         this.loadBracket(id);
+      } else {
+        this.rounds = [];
       }
 
       this.loading = false;
@@ -52,9 +56,14 @@ export class TournamentDetailComponent implements OnInit {
     this.generating = true;
 
     this.service.generateMatches(this.tournament._id)
-      .subscribe(() => {
-        this.loadTournament(this.tournament._id);
-        this.generating = false;
+      .subscribe({
+        next: () => {
+          this.generating = false;
+          this.loadTournament(this.tournament._id);
+        },
+        error: () => {
+          this.generating = false;
+        }
       });
   }
 }

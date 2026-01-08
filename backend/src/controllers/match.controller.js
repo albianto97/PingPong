@@ -7,7 +7,7 @@ const TournamentStanding = require('../models/tournamentStanding.model');
 
 // ⚠️ IMPORT CORRETTO
 const {
-  advanceEliminationTournament
+    advanceEliminationTournament
 } = require('./tournament.controller');
 
 exports.createMatch = async (req, res) => {
@@ -96,57 +96,70 @@ exports.createMatch = async (req, res) => {
       await user2.save();
     }
 
-    // 3️⃣ TORNEO: STANDINGS + AVANZAMENTO
-    if (tournament) {
-      const t = await Tournament.findById(tournament);
+      // 3️⃣ TORNEO: STANDINGS + AVANZAMENTO
+      if (tournament) {
+          const t = await Tournament.findById(tournament);
 
-      const s1 = await TournamentStanding.findOne({
-        tournament,
-        player: players.player1
-      });
+          let s1 = await TournamentStanding.findOne({
+              tournament,
+              player: players.player1
+          });
 
-      const s2 = await TournamentStanding.findOne({
-        tournament,
-        player: players.player2
-      });
+          let s2 = await TournamentStanding.findOne({
+              tournament,
+              player: players.player2
+          });
 
-      s1.matchesPlayed++;
-      s2.matchesPlayed++;
+          // ✅ CREA SE MANCANO
+          if (!s1) {
+              s1 = await TournamentStanding.create({
+                  tournament,
+                  player: players.player1
+              });
+          }
 
-      if (winner.toString() === players.player1.toString()) {
-        s1.matchesWon++;
-        s2.matchesLost++;
-      } else {
-        s2.matchesWon++;
-        s1.matchesLost++;
+          if (!s2) {
+              s2 = await TournamentStanding.create({
+                  tournament,
+                  player: players.player2
+              });
+          }
+
+          s1.matchesPlayed++;
+          s2.matchesPlayed++;
+
+          if (winner.toString() === players.player1.toString()) {
+              s1.matchesWon++;
+              s2.matchesLost++;
+          } else {
+              s2.matchesWon++;
+              s1.matchesLost++;
+          }
+
+          for (const set of sets) {
+              s1.pointsFor += set.player1Points;
+              s1.pointsAgainst += set.player2Points;
+
+              s2.pointsFor += set.player2Points;
+              s2.pointsAgainst += set.player1Points;
+
+              if (set.player1Points > set.player2Points) {
+                  s1.setsWon++;
+                  s2.setsLost++;
+              } else {
+                  s2.setsWon++;
+                  s1.setsLost++;
+              }
+          }
+
+          await s1.save();
+          await s2.save();
+
+          // 🏆 AVANZA BRACKET
+          if (t.type === 'ELIMINATION') {
+              await advanceEliminationTournament(tournament, round);
+          }
       }
-
-      for (const set of sets) {
-        s1.pointsFor += set.player1Points;
-        s1.pointsAgainst += set.player2Points;
-
-        s2.pointsFor += set.player2Points;
-        s2.pointsAgainst += set.player1Points;
-
-        if (set.player1Points > set.player2Points) {
-          s1.setsWon++;
-          s2.setsLost++;
-        } else {
-          s2.setsWon++;
-          s1.setsLost++;
-        }
-      }
-
-      await s1.save();
-      await s2.save();
-
-      // 🏆 AVANZAMENTO ELIMINATION
-      if (t.type === 'ELIMINATION') {
-        await advanceEliminationTournament(tournament, round);
-      }
-    }
-
-    res.status(201).json(match);
 
   } catch (err) {
     res.status(500).json({

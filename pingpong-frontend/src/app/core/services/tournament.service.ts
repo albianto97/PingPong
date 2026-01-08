@@ -17,17 +17,20 @@ export class TournamentService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  getBracket(id: string) {
-    return this.http.get<{ rounds: any[] }>(
-      `${this.apiUrl}/${id}/bracket`
-    );
-  }
-
   generateMatches(id: string) {
     return this.http.post(
       `${this.apiUrl}/${id}/generate-matches`,
       {}
     );
   }
-}
 
+  getBracket(id: string) {
+    return this.http.get<{ rounds: any[] }>(
+      `${this.apiUrl}/${id}/bracket`
+    );
+  }
+  create(data: any) {
+    return this.http.post<any>(this.apiUrl, data);
+  }
+
+}

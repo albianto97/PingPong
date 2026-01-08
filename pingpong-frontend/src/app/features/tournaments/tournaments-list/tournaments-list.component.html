@@ -1,5 +1,11 @@
 <section class="container">
-  <h2>Tornei</h2>
+  <div class="header-row">
+    <h2>Tornei</h2>
+
+    <button class="primary" routerLink="/tournaments/new">
+      + Crea torneo
+    </button>
+  </div>
 
   <div *ngIf="loading">Caricamento tornei...</div>
 
@@ -10,18 +16,9 @@
   <div
     *ngFor="let t of tournaments"
     class="card"
-    (click)="open(t._id)"
-  >
+    (click)="open(t._id)">
     <h3>{{ t.name }}</h3>
-
-    <p>
-      {{ t.type === 'ROUND_ROBIN' ? 'Girone' : 'Eliminazione diretta' }}
-    </p>
-
+    <p>{{ t.type }}</p>
     <span class="status">{{ t.status }}</span>
-
-    <small>
-      {{ t.players.length }} giocatori
-    </small>
   </div>
 </section>

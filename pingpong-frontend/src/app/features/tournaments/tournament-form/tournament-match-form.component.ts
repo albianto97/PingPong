@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatchService } from '../../core/services/match.service';
-import { AuthService } from '../../core/services/auth.service';
+import {MatchService} from '../../../core/services/match.service';
+
 
 @Component({
   selector: 'app-tournament-match-form',
@@ -25,7 +25,6 @@ export class TournamentMatchFormComponent {
 
   constructor(
     private matchService: MatchService,
-    private auth: AuthService
   ) {}
 
   save() {

@@ -5,16 +5,17 @@
   <header class="header">
     <h2>{{ tournament.name }}</h2>
     <span class="badge">{{ tournament.type }}</span>
+    <span class="status">{{ tournament.status }}</span>
   </header>
 
-  <!-- PULSANTE GENERA MATCH -->
+  <!-- PULSANTE GENERA TORNEO -->
   <button
     *ngIf="tournament.status === 'DRAFT'"
     class="primary"
     (click)="generateMatches()"
     [disabled]="generating">
 
-    {{ generating ? 'Generazione in corso...' : 'Genera match' }}
+    {{ generating ? 'Generazione in corso...' : 'Genera torneo' }}
   </button>
 
   <!-- BRACKET -->

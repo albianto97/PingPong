@@ -1,0 +1,21 @@
+<h3>Classifica Torneo</h3>
+
+<table class="standings">
+  <tr>
+    <th>#</th>
+    <th>Giocatore</th>
+    <th>V</th>
+    <th>P</th>
+    <th>Set</th>
+    <th>Punti</th>
+  </tr>
+
+  <tr *ngFor="let s of standings; let i = index">
+    <td>{{ i + 1 }}</td>
+    <td>{{ s.player.username }}</td>
+    <td>{{ s.matchesWon }}</td>
+    <td>{{ s.matchesLost }}</td>
+    <td>{{ s.setsWon }}-{{ s.setsLost }}</td>
+    <td>{{ s.pointsFor }}-{{ s.pointsAgainst }}</td>
+  </tr>
+</table>
